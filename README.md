@@ -18,7 +18,7 @@ can be a HTTP request, a UNIX process, or something else.
 - Redis: Used to track started/ended tasks
 
 The task tracking backend is abstract: If you do not want to use Redis you can replace
-the 100 lines of backend Python code easily.
+with your own solution as the interface is only few lines of Python.
 
 # Overview
 

@@ -38,7 +38,7 @@ class Task:
 
     #: When this task was started.
     #: UTC timestamp, naive (no timezone).
-    #: Automatically filled by :py:meth:`top.core.tracker.Tracker.start_task`.
+    #: Automatically filled by :py:meth:`create_from_current_thread`.
     started_at: Optional[datetime.datetime] = None
 
     #: When this task was startead
@@ -104,6 +104,8 @@ class Task:
             task_id=task_id,
             process_id=pid,
             thread_id=tid,
+            started_at=datetime.datetime.utcnow(),
             processor_name=processor_name,
             **kwargs,
         )
+

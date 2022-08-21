@@ -64,7 +64,6 @@ class RedisTracker(Tracker):
         self.redis.publish(self.task_updates_channel, data)
 
     def start_task(self, task: Task):
-        task.started_at = datetime.datetime.utcnow()
         self.update_task(task)
 
     def end_task(self, task: Task):
@@ -82,8 +81,8 @@ class RedisTracker(Tracker):
 
         # Add task to the past buffer
         # https://stackoverflow.com/a/57776359/315168
-        self.redis.rpush(self.past_tasks_list, data)
-        self.redis.ltrim(self.past_tasks_list, -self.max_past_tasks, -1)
+        self.redis.lpush(self.past_tasks_list, data)
+        self.redis.ltrim(self.past_tasks_list, 0, self.max_past_tasks - 1)
 
     def get_active_tasks(self) -> Dict[str, Task]:
         """Iterate over all hset keys and decode them as tasks."""
