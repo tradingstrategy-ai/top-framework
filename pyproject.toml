@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "top-framework"
+version = "0.1.0"
+description = "Python framework for creating UNIX top like TUI applications easily"
+authors = ["Mikko Ohtamaa <mikko@opensourcehacker.com>"]
+license = "MIT"
+packages = [
+    { include = "top" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+redispy = "^3.0.0"
+textual = "^0.1.18"
+dataclasses-json = "^0.5.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+Sphinx = "^5.1.1"
+furo = "^2022.6.21"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 999
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "-s --tb=native"
+testpaths = [
+    "tests",
+]

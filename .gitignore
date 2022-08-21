@@ -1,0 +1,22 @@
+# Python
+__pycache__
+.pytest_cache
+
+# MacOS
+.DS_Store
+
+# poetry build
+dist
+
+# jupyter
+.ipynb_checkpoints
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+.idea
+.python-version
+
+# docs
+docs/build
+docs/source/**/_autosummary*
