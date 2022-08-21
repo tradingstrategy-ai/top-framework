@@ -1,11 +1,13 @@
+"""Task tracking core."""
+
 import abc
-from typing import Dict, Set, List
+from typing import Dict, List
 
 from top.core.task import Task
 
 
 class Tracker(abc.ABC):
-    """Emitter interface"""
+    """Task tracker backend interface definition."""
 
     @abc.abstractmethod
     def start_task(self, task: Task):
@@ -20,7 +22,7 @@ class Tracker(abc.ABC):
         """Get currently active tasks.
 
         :return:
-            Map of (processor id) -> Task
+            Map of (Processor id -> Task)
         """
 
     @abc.abstractmethod
@@ -32,4 +34,8 @@ class Tracker(abc.ABC):
 
         Tasks are in the completion order.
         The most recently completed task is the first item in the list.
+
+        :return:
+            List of past completed tasks that are in our past tasks buffer.
+            The most recently completed task is the first item in the list.
         """

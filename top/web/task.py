@@ -13,21 +13,30 @@ class HTTPTask(Task):
     """A task for tracking HTTP requests."""
 
     #: HTTP method like GET, POST, put
-    method: str
+    method: Optional[str] = None
 
-    #: /api/my-func
-    path: str
+    #: Request path, like /api/my-func
+    path: Optional[str] = None
 
-    #: HTTP headers dumped as a dict
-    headers: dict
+    #: HTTP GET request params
+    params: Optional[dict] = None
 
-    #: When response has been generated, what code did we sent
-    status_code: Optional[int] = None
+    #: Request HTTP headers dumped as a dict.
+    request_headers: Optional[dict] = None
 
-    #: When response has been generated, what status text we sent
-    status_text: Optional[int] = None
+    #: When response has been generated, what code did we sent.
+    #: Only available when the request processing has finished.
+    response_status_code: Optional[int] = None
 
+    #: Response HTTP headers dumped as a dict.
+    response_headers: Optional[dict] = None
 
-
-
-
+    def __repr__(self):
+        if self.params:
+            params = " ".join([f"{key}={value}" for key, value in self.params.items()])
+        else:
+            params = """"""
+        if self.response_status_code:
+            return f"<{self.method} {self.path} {params} {self.response_status_code}>"
+        else:
+            return f"<{self.method} {self.path} {params}>"

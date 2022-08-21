@@ -1,3 +1,5 @@
+"""Task core structure definition."""
+
 import datetime
 import os
 import threading
