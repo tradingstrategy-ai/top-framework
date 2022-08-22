@@ -147,3 +147,20 @@ def test_track_path(tracker: RedisTracker, server: str):
 
     assert task.path == "/folder"
 
+
+def test_track_ multiple(tracker: RedisTracker, server: str):
+    """Check we get path tracked correctly."""
+
+    assert len(tracker.get_completed_tasks()) == 0
+
+    requests.get(f"{server}/1")
+    requests.get(f"{server}/2")
+    requests.get(f"{server}/3")
+
+    # Give Redis time to sync
+    time.sleep(0.100)
+
+    assert len(tracker.get_completed_tasks()) == 3
+
+
+
