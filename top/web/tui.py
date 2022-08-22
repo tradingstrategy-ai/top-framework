@@ -5,14 +5,14 @@
 - See `Arbitrage tracker UI <https://github.com/tradingstrategy-ai/arbitrage-opportunity-tracker/blob/master/order_book_recorder/main.py#L107>`_
 
 """
-import sys
+import datetime
 import time
 from dataclasses import fields
 from typing import Optional, List
 
 import pkg_resources
 import typer
-from redis import ConnectionPool, StrictRedis
+
 from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
@@ -28,16 +28,19 @@ tracker: Optional[RedisTracker] = None
 column_mappings = {
     "Method": "method",
     "Path": "path",
-    "Processor": "get_processor_tracking_id",
+    "Worker": "get_processor_tracking_id",
     "Duration": "get_duration",
     "Ago": "get_ago",
     "Resp": "status_code",
+    "IP": "client_ip_address",
+    "Length": "get_content_length"
 }
 
 default_active_columns = [
-    "Processor",
+    "Worker",
     "Method",
     "Path",
+    "IP",
     "Duration"
 ]
 
@@ -46,7 +49,7 @@ default_completed_columns = [
     "Resp",
     "Method",
     "Path",
-    "Duration"
+    "Length",
 ]
 
 
@@ -56,6 +59,7 @@ def prepare_row(task: HTTPTask, columns: List[str]):
     Get HTTPTask value either by accessor method or direct attribute.
     """
 
+    # TODO: Build a better framework in the future
     dataclass_fields = {f.name for f in fields(HTTPTask)}
 
     result = []
@@ -69,7 +73,12 @@ def prepare_row(task: HTTPTask, columns: List[str]):
             val = attr()
 
         if val:
-            val = str(val)
+            if isinstance(val, datetime.timedelta):
+                val = f"{val.total_seconds():.2f}"
+            elif type(val) == int:
+                val = f"{val:,}"
+            else:
+                val = str(val)
         else:
             val = ""
         result.append(val)
@@ -96,7 +105,7 @@ def create_ui(
     completed_columns: List[str],
     width: int,
     height: int) -> Layout:
-    """Simple live UI."""
+    """web-top UI using Rich."""
 
     active_tasks: List[HTTPTask] = list(tracker.get_active_tasks().values())
     completed_tasks: List[HTTPTask] = tracker.get_completed_tasks()
@@ -107,7 +116,7 @@ def create_ui(
                    )
 
     past = Table(*completed_columns,
-                   title=f"Recently completed requests ({len(completed_tasks)})",
+                   title=f"Completed HTTP responses ({len(completed_tasks)})",
                  width=width,
                  )
 
@@ -121,7 +130,7 @@ def create_ui(
     layout["bottom"].update(past)
 
     # Show longest duration tasks first
-    active_tasks.sort(key=lambda t: t.get_duration(), reverse=True)
+    # active_tasks.sort(key=lambda t: t.get_duration(), reverse=True)
 
     fill_tasks_table(active, active_tasks, active_columns, height // 2 - 5)
     fill_tasks_table(past, completed_tasks, completed_columns, height // 2 - 5)

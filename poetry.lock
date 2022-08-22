@@ -520,6 +520,14 @@ tomli = ">=1.0.0"
 testing = ["xmlschema", "requests", "pygments (>=2.7.2)", "nose", "mock", "hypothesis (>=3.56)", "argcomplete"]
 
 [[package]]
+name = "python-lorem"
+version = "1.1.2"
+description = "Lorem ipsum generator."
+category = "dev"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "pytz"
 version = "2022.2.1"
 description = "World timezone definitions, modern and historical"
@@ -839,7 +847,7 @@ gunicorn = ["gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "207082319491baff232409b865ebf0b0dda4ff8392d6d82df0156f1f5a9582b0"
+content-hash = "14c722e02dc7aa9ec29f58980a2d414eafd44a41669d9ec935de48fdec72aabe"
 
 [metadata.files]
 alabaster = []
@@ -887,6 +895,7 @@ py = []
 pygments = []
 pyparsing = []
 pytest = []
+python-lorem = []
 pytz = []
 redispy = []
 requests = []

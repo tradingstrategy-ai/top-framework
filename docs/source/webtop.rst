@@ -52,7 +52,7 @@ Start Gunicorn with the integration hooks:
         --config=top/gunicorn/example_config.py \
         --log-level=debug \
         --access-logfile /dev/stdout \
-        "top.gunicorn.testapp:app"
+        "top.gunicorn.testapp:slow_app"
 
 Demo
 ~~~~

@@ -58,10 +58,10 @@ class HTTPTask(Task):
             params = " ".join([f"{key}={value}" for key, value in self.params.items()])
         else:
             params = """"""
-        if self.response_status_code:
-            return f"<{self.method} {self.path} {params} {self.response_status_code}>"
+        if self.status_code:
+            return f"<HTTPTask {self.method} {self.path} {params} {self.status_code}>"
         else:
-            return f"<{self.method} {self.path} {params}>"
+            return f"<HTTPTask {self.method} {self.path} {params}>"
 
     def get_single_request_header(self, name: str) -> Optional[str]:
         """Get a value of a single HTTP header in a request.

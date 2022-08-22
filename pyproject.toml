@@ -25,6 +25,7 @@ ipdb = "^0.13.9"
 # Per-integration dependencies
 psutil = "^5.9.1"
 requests = "^2.28.1"
+python-lorem = "^1.1.2"
 # https://stackoverflow.com/a/66030875/315168
 [tool.poetry.extras]
 gunicorn = ["gunicorn"]

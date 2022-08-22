@@ -131,7 +131,7 @@ class Task:
             if self.ended_at:
                 return self.ended_at - self.started_at
             else:
-                return datetime.datetime.utcnow() - self.started_at
+                return datetime.datetime.now(datetime.timezone.utc) - self.started_at
 
         return None
 
