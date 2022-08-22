@@ -54,6 +54,9 @@ def server() -> str:
         "gunicorn",
         f"--bind=127.0.0.1:{port}",
         "--workers=2",
+        "--pre-request=top.gunicorn.hooks.pre_request",
+        "--post-request=top.gunicorn.hooks.post_request",
+        "--when-ready=top.gunicorn.hooks.when_ready",
         "top.gunicorn.testapp:app"
     ]
 
