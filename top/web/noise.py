@@ -15,10 +15,15 @@ from top.redis.tracker import RedisTracker
 from top.web.task import HTTPTask
 
 
-tracker = RedisTracker.create_default_instance()
+tracker = RedisTracker.create_default_instance(HTTPTask)
+
+
+task_counter = 0
 
 
 def event_generator():
+    global task_counter
+
     min_next_delay = 0.01
     max_next_delay = 1
     min_req_duration = 0
@@ -37,13 +42,16 @@ def event_generator():
         if left > 0:
             time.sleep(left)
 
-        t = HTTPTask(
+        t = HTTPTask.create_from_current_thread(
+            task_counter,
             method=random.choice(methods),
             path=random.choice(paths),
             request_headers={
                 "Client-addr": random.choice(client_ips)
             }
         )
+
+        task_counter += 1
 
         # Add some GET params
         if t.method == "GET":
@@ -72,6 +80,7 @@ def event_generator():
 
 
 def main():
+    tracker.clear()
     generator_threads = 20
     for i in range(generator_threads):
         thread = Thread(target=event_generator)

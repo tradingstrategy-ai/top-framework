@@ -2,7 +2,7 @@
 
 import datetime
 import os
-from typing import Dict, Set, List
+from typing import Dict, Set, List, Type
 
 from redis import StrictRedis, ConnectionPool
 
@@ -21,16 +21,23 @@ class RedisTracker(Tracker):
 
     def __init__(self,
                  redis: StrictRedis,
+                 task_type: Type[Task],
                  max_past_tasks=50):
         """Create a new emitter.
 
         :param redis:
             Redis instance
 
+        :param task_type:
+            Subclass of Task or Task class itself.
+            Used to serialise/deserialise data to Redis.
+
         :param max_past_tasks:
             How many tasks to keep in the past events log
         """
         self.redis = redis
+
+        self.task_type = task_type
 
         self.max_past_tasks = max_past_tasks
 
@@ -43,13 +50,16 @@ class RedisTracker(Tracker):
         #: Pub sub key for task updates
         self.task_updates_channel = "task_updates"
 
-    def clear_dangerous(self):
+    def clear(self):
         """Clear out whatever Redis dataabase we are connected do.
 
-        Test method. Will destroy your database in production.
+        - Call at the restart of your system e.g. web server
+          to clear any dangling processors
+
+        - Call at the start of the tests when you need to clear
+          the previous test database
         """
-        keys = self.redis.keys("*")
-        for key in keys:
+        for key in (self.processors_hkey, self.past_tasks_list,):
             self.redis.delete(key)
 
     def update_task(self, task: Task):
@@ -85,25 +95,37 @@ class RedisTracker(Tracker):
         self.redis.ltrim(self.past_tasks_list, 0, self.max_past_tasks - 1)
 
     def get_active_tasks(self) -> Dict[str, Task]:
-        """Iterate over all hset keys and decode them as tasks."""
+        """Iterate over all hset keys and decode them as tasks.
+
+        :param cls:
+            Subclass of Task that is used to deserialise data.
+        """
         res = {}
         keys = self.redis.hkeys(self.processors_hkey)
         for processor_id in keys:
             task_blob = self.redis.hget(self.processors_hkey, processor_id)
-            res[processor_id] = Task.deserialise(task_blob)
+            if task_blob is not None:
+                # Because of race condition, we might have the key
+                # gone missing while iterating
+                res[processor_id] = self.task_type.deserialise(task_blob)
         return res
 
     def get_completed_tasks(self) -> List[Task]:
         res = []
         task_blobs = self.redis.lrange(self.past_tasks_list, 0, -1)
         for blob in task_blobs:
-            res.append(Task.deserialise(blob))
+            res.append(self.task_type.deserialise(blob))
         return res
 
     @staticmethod
-    def create_default_instance(env_var_name="TOP_REDIS_URL",
+    def create_default_instance(task_type: Type[Task],
+                                env_var_name="TOP_REDIS_URL",
                                 max_past_tasks=50) -> "RedisTracker":
         """Creates a connection to the Redis database.
+
+        :param task_type:
+            Subclass of Task or Task class itself.
+            Used to serialise/deserialise data to Redis.
 
         :param env_var_name:
             This environment variable contains the Redis URL where to connect
@@ -119,4 +141,4 @@ class RedisTracker(Tracker):
         pool = ConnectionPool.from_url(redis_url)
         client = StrictRedis(connection_pool=pool)
 
-        return RedisTracker(client, max_past_tasks)
+        return RedisTracker(client, task_type, max_past_tasks)

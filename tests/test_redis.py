@@ -13,7 +13,7 @@ from top.redis.tracker import RedisTracker
 def tracker() -> RedisTracker:
     """Create default emitter"""
     emitter = RedisTracker.create_default_instance(max_past_tasks=50)
-    emitter.clear_dangerous()
+    emitter.clear()
     return emitter
 
 

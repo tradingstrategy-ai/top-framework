@@ -3,10 +3,13 @@
 import datetime
 import os
 import threading
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import dataclass_json, config
+from marshmallow import fields
+
+from top.core.encoding import encode_date, decode_date
 
 
 @dataclass_json
@@ -18,6 +21,8 @@ class Task:
 
     `dataclasses_json library <https://github.com/lidatong/dataclasses-json>`_ is used to automatically
     convert Python :py:mod:`dataclass` structures to JSON and back.
+
+    All timestamps are encoded as ISO-8601 strings.
     """
 
     #: UNIX process that started this task
@@ -41,16 +46,35 @@ class Task:
     #: When this task was started.
     #: UTC timestamp, naive (no timezone).
     #: Automatically filled by :py:meth:`create_from_current_thread`.
-    started_at: Optional[datetime.datetime] = None
-
+    started_at: Optional[datetime.datetime] = field(
+        default=None,
+        metadata=config(
+            encoder=encode_date,
+            decoder=decode_date,
+            mm_field=fields.DateTime(format='iso')
+        )
+    )
     #: When this task was startead
     #: UTC timestamp, naive (no timezone)
-    updated_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = field(
+        default=None,
+        metadata=config(
+            encoder=encode_date,
+            decoder=decode_date,
+            mm_field=fields.DateTime(format='iso')
+        )
+    )
 
     #: When this task was ended.
     #: Automatically filled by :py:meth:`top.core.tracker.Tracker.end_task`.
-    ended_at: Optional[datetime.datetime] = None
-
+    ended_at: Optional[datetime.datetime] = field(
+        default=None,
+        metadata=config(
+            encoder=encode_date,
+            decoder=decode_date,
+            mm_field=fields.DateTime(format='iso')
+        )
+    )
     #: Did this task success?
     #:
     #: None = we do not know yet.
@@ -68,20 +92,53 @@ class Task:
         return hash((self.task_id))
 
     def get_processor_tracking_id(self) -> str:
-        """Get the key used in our tracking table (Redis) for this task."""
-        return f"{self.process_id}-{self.thread_id}-{self.process_internal_id}"
+        """Get the key used in our tracking table (Redis) for this task.
+
+        You can also override this function to have specific processor id
+        scheme for your application.
+        """
+        if self.process_internal_id:
+            return f"{self.process_id}-{self.thread_id}-{self.process_internal_id}"
+        else:
+            return f"pid:{self.process_id} tid:{self.thread_id}"
+
+    def get_duration(self) -> Optional[datetime.timedelta]:
+        """Get the duration of this task.
+
+        - For completed tasks, return the actual duration
+
+        - For active tasks, return how much time has passed since start
+
+        - If start is missing, return None
+        """
+
+        if self.started_at:
+            if self.ended_at:
+                return self.ended_at - self.started_at
+            else:
+                return datetime.datetime.utcnow() - self.started_at
+
+        return None
+
+    def get_ago(self) -> datetime.timedelta:
+        """Get how long ago this task finished.
+
+        Can be called only for completed tasks.
+        """
+        assert self.ended_at
+        return datetime.datetime.utcnow() - self.ended_at
 
     def serialise(self) -> bytes:
         """Serialise using dataclasS_json"""
         return self.to_json().encode("utf-8")
 
-    @staticmethod
-    def deserialise(blob: bytes) -> "Task":
+    @classmethod
+    def deserialise(cls, blob: bytes) -> "Task":
         """Serialise using dataclasses_json"""
-        return Task.from_json(blob)
+        return cls.from_json(blob)
 
-    @staticmethod
-    def create_from_current_thread(task_id: Union[str, int], **kwargs) -> "Task":
+    @classmethod
+    def create_from_current_thread(cls, task_id: Union[str, int], **kwargs) -> "Task":
         """Create a task and assuming the processor is the current OS thread.
 
         Automatically labels the task to belong to the OS
@@ -102,7 +159,7 @@ class Task:
         thread_name = threading.current_thread().name
         processor_name = f"{pid}:{thread_name}" or kwargs.get("processor_name")
 
-        return Task(
+        return cls(
             task_id=task_id,
             process_id=pid,
             thread_id=tid,

@@ -8,6 +8,6 @@ services:
   redis:
     container_name: redis
     image: "redis:alpine"
-    command: redis-server --requirepass "${REDIS_PASSWORD}"
+    command: redis-server
     ports:
       - "127.0.0.1:7777:6379"
