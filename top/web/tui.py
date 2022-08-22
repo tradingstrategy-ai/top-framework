@@ -5,10 +5,12 @@
 - See `Arbitrage tracker UI <https://github.com/tradingstrategy-ai/arbitrage-opportunity-tracker/blob/master/order_book_recorder/main.py#L107>`_
 
 """
+import sys
 import time
 from dataclasses import fields
 from typing import Optional, List
 
+import pkg_resources
 import typer
 from redis import ConnectionPool, StrictRedis
 from rich.console import Console
@@ -16,6 +18,7 @@ from rich.layout import Layout
 from rich.live import Live
 from rich.table import Table
 
+from top.integration import get_tracker_by_url_config
 from top.redis.tracker import RedisTracker
 from top.web.task import HTTPTask
 
@@ -28,7 +31,7 @@ column_mappings = {
     "Processor": "get_processor_tracking_id",
     "Duration": "get_duration",
     "Ago": "get_ago",
-    "Resp": "response_status_code",
+    "Resp": "status_code",
 }
 
 default_active_columns = [
@@ -117,24 +120,41 @@ def create_ui(
     layout["top"].update(active)
     layout["bottom"].update(past)
 
+    # Show longest duration tasks first
+    active_tasks.sort(key=lambda t: t.get_duration(), reverse=True)
+
     fill_tasks_table(active, active_tasks, active_columns, height // 2 - 5)
     fill_tasks_table(past, completed_tasks, completed_columns, height // 2 - 5)
 
     return layout
 
 
+def version_callback(value: bool):
+    """Print out application version.
+
+    See https://typer.tiangolo.com/tutorial/options/version/
+    """
+    if value:
+        my_version = pkg_resources.get_distribution('top-framework').version
+        print(f"{my_version}")
+        raise typer.Exit()
+
+
 def main(
-    redis_url: str = typer.Option(..., envvar="TOP_REDIS_URL", help="Redis database for HTTP request tracking"),
+    tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
     refresh_rate: float = typer.Option(2.0, envvar="REFRESH_RATE", help="How many seconds have between refreshes"),
     active_columns: str = typer.Option(",".join(default_active_columns), envvar="ACTIVE_COLUMNS", help="Comma separated list of columns to be displayed for active HTTP requests"),
     completed_columns: str = typer.Option(",".join(default_completed_columns), envvar="COMPLETED_COLUMNS", help="Comma separated list of columns to be displayed for completed HTTP requests"),
+    version: Optional[bool] = typer.Option(None, help="Show version and exit", callback=version_callback),
 ):
+    """
+    web-top shows active and completed request of your web server
+
+    For more information see https://github.com/tradingstrategy-ai/top-framework
+    """
     global tracker
 
-    pool = ConnectionPool.from_url(redis_url)
-    client = StrictRedis(connection_pool=pool)
-
-    tracker = RedisTracker(client, HTTPTask)
+    tracker = get_tracker_by_url_config(HTTPTask, tracker_url)
 
     console = Console()
 
