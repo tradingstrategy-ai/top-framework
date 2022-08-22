@@ -44,8 +44,14 @@ class HTTPTask(Task):
     #: Server status message
     status_message: Optional[str] = None
 
-    #: Response HTTP headers dumped as a dict.
-    response_headers: Optional[dict] = None
+    #: Response HTTP headers.
+    #:
+    #: Available as key value mapping.
+    #:
+    #: Note that in HTTP protocol a header can appear twice.
+    #: Uppercase all key names.
+    #:
+    response_headers: Optional[List[Tuple[str, str]]] = None
 
     def __repr__(self):
         if self.params:
@@ -78,6 +84,27 @@ class HTTPTask(Task):
 
         return retval
 
+    def get_single_response_header(self, name: str) -> str:
+        """Get a value of a single HTTP header in a response.
+
+        :param name:
+            Case insensitive HTTP header name
+
+        :raise AssertionError:
+            If the same header appears twice
+
+        :return:
+            The header value
+        """
+
+        retval = None
+        for header, value in self.response_headers:
+            if header.upper() == name.upper():
+                assert not retval, "The header appears twice: {name}"
+                retval = value
+
+        return retval
+
     def get_host(self) -> str:
         """HTTP request header shortcut method."""
         return self.get_single_request_header("HOST")
@@ -89,3 +116,13 @@ class HTTPTask(Task):
     def get_accept_encoding(self) -> str:
         """HTTP request header shortcut method."""
         return self.get_single_request_header("ACCEPT-ENCODING")
+
+    def get_content_length(self) -> Optional[int]:
+        """Get the content length of the response.
+
+        If not set return None.
+        """
+        val = self.get_single_response_header("Content-length")
+        if val:
+            return int(val)
+        return None
