@@ -1,7 +1,8 @@
-
+import unicodedata
 from dataclasses import dataclass
 from typing import Optional, List, Tuple, Dict
 
+import flag
 from dataclasses_json import dataclass_json
 
 from top.core.task import Task
@@ -132,3 +133,39 @@ class HTTPTask(Task):
         if val:
             return int(val)
         return None
+
+    def get_ip_country(self) -> str:
+        """Return the country code of the client IP address.
+
+        Currently only supports `cf-ipcountry <https://support.cloudflare.com/hc/en-us/articles/200168236-Configuring-IP-geolocation>`_
+        header.
+
+        :return:
+            ISO 3166-1 Alpha 2 country code of the client as uppercase.
+            Special codes like T1 are returned for Tor network, etc.
+        """
+        return self.get_single_request_header("CF-IPCOUNTRY")
+
+    def get_flag(self) -> str:
+        """Return the Unicode flag emoticon based on the country IP address.
+
+        `Based on emoji-country-flag <https://pypi.org/project/emoji-country-flag/>`_.
+
+        See :py:meth:`get_ip_country`
+        """
+
+        # TODO: Waiting for issue
+
+        code = self.get_ip_country()
+        if code is not None:
+            try:
+                flag = "".join(
+                    unicodedata.lookup(f"REGIONAL INDICATOR SYMBOL LETTER {char}")
+                    for char in code
+                )
+                return flag
+            except KeyError:
+                # T1 = Tor country
+                return ""
+        else:
+            return ""

@@ -20,6 +20,7 @@ def event_generator():
     max_next_delay = 1
     methods = ["GET", "POST", "PUT"]
     paths = ["/", "/api/register", "/api/login", "/about", "/contact"]
+    countries = ["FI", "US", "T1", "CH", "GI"]
 
     next_event = datetime.datetime.utcnow()
 
@@ -45,12 +46,18 @@ def event_generator():
             if random.random() > 0.5:
                 params["previous-page"] = "bbb"
 
+        # Some requests have geolocation
+        headers = {}
+        if random.random() > 0.05:
+            headers["CF-IPCountry"] = random.choice(countries)
+
         url = f"{server}{path}"
 
         req = requests.Request(
             method=method,
             url=url,
             params=params,
+            headers=headers,
         )
 
         req = req.prepare()

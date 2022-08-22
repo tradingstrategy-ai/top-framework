@@ -16,7 +16,7 @@ from rich.table import Table
 
 from top.integration import get_tracker_by_url_config
 from top.redis.tracker import RedisTracker
-from top.tui.column import create_column
+from top.tui.column import create_column, determine_enabled_columns
 from top.tui.row import fill_tasks_table
 from top.web.colour import colour_by_status, colour_by_duration
 from top.web.column import default_active_columns, default_completed_columns, http_task_column_mappings, \
@@ -52,6 +52,9 @@ def create_ui(
 
     active_tasks: List[HTTPTask] = list(tracker.get_active_tasks().values())
     completed_tasks: List[HTTPTask] = tracker.get_completed_tasks()
+
+    active_columns = determine_enabled_columns(active_columns, column_mappings, active_tasks)
+    completed_columns = determine_enabled_columns(completed_columns, column_mappings, completed_tasks)
 
     active = Table(*[create_column(c, column_mappings) for c in active_columns],
                    title=f"Active HTTP requests ({len(active_tasks)})",
@@ -165,6 +168,8 @@ def recent(
         tasks = completed_tasks
     else:
         tasks = active_tasks + completed_tasks
+
+    columns = determine_enabled_columns(columns, http_task_column_mappings, tasks)
 
     table = Table(*columns, title=f"HTTP requests ({len(tasks)})")
 
