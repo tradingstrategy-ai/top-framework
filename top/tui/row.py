@@ -43,7 +43,7 @@ def prepare_row(task: Task,
 
     result = []
     for c in columns:
-        key = column_mappings[c]
+        key = column_mappings[c][0]
 
         if key in dataclass_fields:
             val = getattr(task, key)

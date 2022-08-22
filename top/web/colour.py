@@ -2,7 +2,7 @@
 from top.web.task import HTTPTask
 
 
-def color_by_status(t: HTTPTask):
+def colour_by_status(t: HTTPTask):
     """Set row colour by its HTTP status.
 
     `See the colour map <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`_.
@@ -26,3 +26,18 @@ def color_by_status(t: HTTPTask):
     else:
         # No idea?
         return "bright_magenta"
+
+
+def colour_by_duration(t: HTTPTask):
+    """Set row colour by its duration.
+
+    `See the colour map <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`_.
+    """
+
+    duration = t.get_duration().total_seconds()
+    if duration < 1.0:
+        return "green"
+    elif duration < 2.5:
+        return "yellow"
+    else:
+        return "red"
