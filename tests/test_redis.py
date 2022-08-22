@@ -12,20 +12,48 @@ from top.redis.tracker import RedisTracker
 @pytest.fixture
 def tracker() -> RedisTracker:
     """Create default emitter"""
-    emitter = RedisTracker.create_default_instance(max_past_tasks=50)
+    emitter = RedisTracker.create_default_instance(Task, max_past_tasks=50)
     emitter.clear()
     return emitter
+
+
+def test_serialise_task(tracker: RedisTracker):
+    """Serialise/deserialise a task in a round trip."""
+
+    t = Task.create_from_current_thread("1")
+    blob = t.serialise()
+
+    t2 = Task.deserialise(blob)
+    assert t.started_at == t2.started_at
+    blob2 = t2.serialise()
+
+    assert blob == blob2
+
+
+def test_clear(tracker: RedisTracker):
+    """Clear danling tasks from the database."""
+
+    t = Task.create_from_current_thread("1")
+
+    # Write task to redis
+    tracker.start_task(t)
+    tracker.clear()
+    current_tasks = tracker.get_active_tasks()
+    assert len(current_tasks) == 0, f"Got {len(current_tasks)} tasks when 0 was expected"
 
 
 def test_start_end_task(tracker: RedisTracker):
     """Push a new task and read it back."""
 
     t = Task.create_from_current_thread("1")
+
+    # Write task to redis
     tracker.start_task(t)
     time.sleep(0.50)
 
     # Check the task appears in the current tasks
     current_tasks = tracker.get_active_tasks()
+    assert len(current_tasks) == 1, f"Got {len(current_tasks)} tasks when 1 was expected"
     t2 = next(iter(current_tasks.values()))
     assert t2.task_id == t.task_id
     assert t2.started_at > datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)

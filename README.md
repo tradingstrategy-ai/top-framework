@@ -26,8 +26,9 @@ The *Top Framework* consists of few parts
 
 - *Tracker backend*: to track and store tasks are currently active and completed 
 - *Client library*: to emit events when a task starts and ends
-- *Text user interface*: A command line application that gives you a nice `top` view over your tasks
-
+- *Text user interface*: A command line application that gives you a nice `top` view over your tasks,
+  acting as a client for the tracker backend
+ 
 # Design goals
 
 See documentation

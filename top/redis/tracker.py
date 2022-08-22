@@ -2,7 +2,7 @@
 
 import datetime
 import os
-from typing import Dict, Set, List, Type
+from typing import Dict, List, Type
 
 from redis import StrictRedis, ConnectionPool
 
@@ -12,6 +12,8 @@ from top.core.task import Task
 
 class RedisTracker(Tracker):
     """Manage task status in Redis.
+
+    - Tasks are stored as UTF-8 encoded JSON blobs in Redis
 
     - Internally uses `redis-py <https://redis-py.readthedocs.io/en/stable/index.html>`_
 
@@ -51,7 +53,7 @@ class RedisTracker(Tracker):
         self.task_updates_channel = "task_updates"
 
     def clear(self):
-        """Clear out whatever Redis dataabase we are connected do.
+        """Clear out whatever Redis database we are connected do.
 
         - Call at the restart of your system e.g. web server
           to clear any dangling processors
@@ -63,7 +65,7 @@ class RedisTracker(Tracker):
             self.redis.delete(key)
 
     def update_task(self, task: Task):
-        task.updated_at = datetime.datetime.utcnow()
+        task.updated_at = datetime.datetime.now(datetime.timezone.utc)
         processor_id = task.get_processor_tracking_id()
         data = task.serialise()
 
@@ -77,7 +79,7 @@ class RedisTracker(Tracker):
         self.update_task(task)
 
     def end_task(self, task: Task):
-        task.ended_at = task.updated_at = datetime.datetime.utcnow()
+        task.ended_at = task.updated_at = datetime.datetime.now(datetime.timezone.utc)
         task.recorded_successfully = True
 
         data = task.serialise()
@@ -95,11 +97,7 @@ class RedisTracker(Tracker):
         self.redis.ltrim(self.past_tasks_list, 0, self.max_past_tasks - 1)
 
     def get_active_tasks(self) -> Dict[str, Task]:
-        """Iterate over all hset keys and decode them as tasks.
-
-        :param cls:
-            Subclass of Task that is used to deserialise data.
-        """
+        # Iterate over all hset keys and decode them as tasks.
         res = {}
         keys = self.redis.hkeys(self.processors_hkey)
         for processor_id in keys:

@@ -130,7 +130,8 @@ class Task:
 
     def serialise(self) -> bytes:
         """Serialise using dataclasS_json"""
-        return self.to_json().encode("utf-8")
+        blob = self.to_json().encode("utf-8")
+        return blob
 
     @classmethod
     def deserialise(cls, blob: bytes) -> "Task":
@@ -142,7 +143,13 @@ class Task:
         """Create a task and assuming the processor is the current OS thread.
 
         Automatically labels the task to belong to the OS
-        current process/thread.
+        current process/thread. This will fill the following fields:
+
+        - :py:attr:`process_id`
+
+        - :py:attr:`thread_id`
+
+        - :py:attr:`processor_name`
 
         :param task_id:
             Something unique to identify this task.
@@ -163,8 +170,7 @@ class Task:
             task_id=task_id,
             process_id=pid,
             thread_id=tid,
-            started_at=datetime.datetime.utcnow(),
+            started_at=datetime.datetime.now(datetime.timezone.utc),
             processor_name=processor_name,
             **kwargs,
         )
-
