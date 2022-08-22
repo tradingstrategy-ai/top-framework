@@ -47,5 +47,5 @@ testpaths = [
 ]
 
 [tool.poetry.scripts]
-web-top = 'top.web.tui:start'
+web-top = 'top.web.main:app'
 random-http-requests = 'top.web.random_requests:main'

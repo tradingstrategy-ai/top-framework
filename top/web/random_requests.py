@@ -58,9 +58,6 @@ def event_generator():
 
         resp = session.send(req)
 
-        if resp.status_code != 200:
-            resp.raise_for_status()
-
         next_event = datetime.datetime.utcnow() + datetime.timedelta(seconds=random.uniform(min_next_delay, max_next_delay))
 
 

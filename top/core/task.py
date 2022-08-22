@@ -135,13 +135,15 @@ class Task:
 
         return None
 
-    def get_ago(self) -> datetime.timedelta:
+    def get_ago(self) -> Optional[datetime.timedelta]:
         """Get how long ago this task finished.
 
-        Can be called only for completed tasks.
+        :return:
+            Relative to now, or None if the task is not yet finished
         """
-        assert self.ended_at
-        return datetime.datetime.now(datetime.timezone.utc) - self.ended_at
+        if self.ended_at:
+            return datetime.datetime.now(datetime.timezone.utc) - self.ended_at
+        return None
 
     def serialise(self) -> bytes:
         """Serialise using dataclasS_json"""

@@ -29,7 +29,14 @@ def slow_app(environ, start_response):
     text = "\n".join(list(itertools.islice(paragraph(), 3)))
     data = text.encode("utf-8")
 
-    status = '200 OK'
+    statuses = [
+        "200 OK",
+        "302 Moved temporarily",
+        "404 Not found",
+        "500 Internal server error",
+    ]
+
+    status = random.choice(statuses)
     response_headers = [
         ('Content-type', 'text/plain; charset=utf8'),
         ('Content-Length', str(len(data)))
