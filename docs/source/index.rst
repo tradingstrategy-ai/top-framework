@@ -12,6 +12,7 @@ Welcome to Top Framework's documentation!
 
     design-goals
     data-structure
+    security
     tests
 
 Indices and tables

@@ -26,7 +26,10 @@ class HTTPTask(Task):
 
     #: When response has been generated, what code did we sent.
     #: Only available when the request processing has finished.
-    response_status_code: Optional[int] = None
+    status_code: Optional[int] = None
+
+    #: Server status message
+    status_message: Optional[str] = None
 
     #: Response HTTP headers dumped as a dict.
     response_headers: Optional[dict] = None

@@ -82,6 +82,21 @@ class Task:
     #: false = task was cleaned up by monitor/timeout.
     recorded_successfully: Optional[bool] = None
 
+    #: Generic tracking tags that can be associated with tasks.
+    #:
+    #: Frameworks like `OpenTelemetry <https://opentelemetry.io/>`__
+    #: and statsd support tagging sources and events.
+    #: Usually these are used to detect the server production mode,
+    #: deployed version,
+    #: Kubernetes/Docker/other deployment information and such,
+    #:
+    #: Here you can add any tags to the request.
+    #: When :py:meth:`top.core.tracker.Tracker.start_request`
+    #: is called, the tracker specific tags are automatically
+    #: applied here.
+    #:
+    tags: Optional[dict] = None
+
     def __eq__(self, other: "Task"):
         """All tasks are identified by their task_id attribute.
         """

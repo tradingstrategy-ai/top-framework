@@ -55,6 +55,9 @@ class RedisTracker(Tracker):
         #: Pub sub key for task updates
         self.task_updates_channel = "task_updates"
 
+        #: When we cleared the tracker last time
+        self.last_cleared_at_key = "last_cleared_at"
+
     def clear(self):
         """Clear out whatever Redis database we are connected do.
 
@@ -66,6 +69,9 @@ class RedisTracker(Tracker):
         """
         for key in (self.processors_hkey, self.past_tasks_list,):
             self.redis.delete(key)
+
+        # Add a marker key about clearing the database
+        self.redis.set(self.last_cleared_at_key, datetime.datetime.now(datetime.timezone.utc).isoformat())
 
     def update_task(self, task: Task):
         task.updated_at = datetime.datetime.now(datetime.timezone.utc)

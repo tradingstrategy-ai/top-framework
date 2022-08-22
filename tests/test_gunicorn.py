@@ -6,6 +6,7 @@ References
 
 -
 """
+import datetime
 import shutil
 import subprocess
 import time
@@ -14,21 +15,22 @@ import psutil
 import pytest
 import requests
 
-from top.core.task import Task
+
 from top.redis.tracker import RedisTracker
 from top.utils import is_localhost_port_listening
+from top.web.task import HTTPTask
 
 
 @pytest.fixture
 def tracker() -> RedisTracker:
     """Create default emitter"""
-    emitter = RedisTracker.create_default_instance(Task)
+    emitter = RedisTracker.create_default_instance(HTTPTask)
     emitter.clear()
     return emitter
 
 
 @pytest.fixture
-def server() -> str:
+def server(request) -> str:
     """Launch Gunicorn integration test server using command line.
 
     - Start a test instance of Gunicorn in a child process
@@ -42,7 +44,7 @@ def server() -> str:
     port = 9999
     start_timeout = 3.0
 
-    assert not is_localhost_port_listening(port)
+    assert not is_localhost_port_listening(port), f"Port {port} already reserved - do we have zombie gunicorn around? try pkill -f gunicorn"
 
     gunicorn_binary = "gunicorn"
 
@@ -54,9 +56,7 @@ def server() -> str:
         "gunicorn",
         f"--bind=127.0.0.1:{port}",
         "--workers=2",
-        "--pre-request=top.gunicorn.hooks.pre_request",
-        "--post-request=top.gunicorn.hooks.post_request",
-        "--when-ready=top.gunicorn.hooks.when_ready",
+        "--config=top/gunicorn/example_config.py",
         "top.gunicorn.testapp:app"
     ]
 
@@ -77,12 +77,47 @@ def server() -> str:
             raise RuntimeError(f"Failed to launch gunicorn:\n{stdout}\n{stderr}")
 
     yield f"http://localhost:{port}"
-    process.kill()
+
+    process.terminate()
+
+    # Dump Gunicorn logs
+    # TODO: Make this conditional and only do if the test fails
+    stdout = process.communicate()[0].decode("utf-8")
+    stderr = process.communicate()[1].decode("utf-8")
+    print(stdout)
+    print(stderr)
 
 
 def test_gunicorn_request(tracker: RedisTracker, server: str):
     """Test that we get a request through."""
-
-    print("Making a request")
     resp = requests.get(server)
     assert resp.status_code == 200
+
+
+def test_cleared(tracker: RedisTracker, server: str):
+    """Clear tracker database on startup."""
+    redis = tracker.redis
+    cleared_val = redis.get(tracker.last_cleared_at_key).decode("utf-8")
+    cleared_at = datetime.datetime.fromisoformat(cleared_val)
+    assert datetime.datetime.now(datetime.timezone.utc) - cleared_at < datetime.timedelta(seconds=10)
+
+
+def test_track_gunicorn(tracker: RedisTracker, server: str):
+    """Check that we track a request."""
+
+    assert len(tracker.get_completed_tasks()) == 0
+
+    resp = requests.get(server)
+    assert resp.status_code == 200
+
+    # Give Redis time to sync
+    time.sleep(0.100)
+
+    assert len(tracker.get_active_tasks()) == 0
+    assert len(tracker.get_completed_tasks()) == 1
+
+    task: HTTPTask = tracker.get_completed_tasks()[0]
+
+    assert task.status_code == 200
+    assert task.status_message == "200 OK"
+
