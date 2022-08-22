@@ -148,5 +148,10 @@ def main(
             time.sleep(refresh_rate)
 
 
+def start():
+    """Poetry entrypoint."""
+    typer.run(main)
+
+
 if __name__ == "__main__":
     typer.run(main)

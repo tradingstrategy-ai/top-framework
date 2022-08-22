@@ -44,3 +44,7 @@ addopts = "-s --tb=native"
 testpaths = [
     "tests",
 ]
+
+[tool.poetry.scripts]
+web-top = 'top.web.tui:start'
+random-http-requests = 'top.web.random_requests:main'

@@ -4,7 +4,6 @@ References
 
 - https://github.com/ConsenSys/python-utils/blob/9725f15f688303e116b7937242f8354a4a070808/tests/gunicorn/test_app.py
 
--
 """
 import datetime
 import shutil
@@ -30,7 +29,7 @@ def tracker() -> RedisTracker:
 
 
 @pytest.fixture
-def server(request) -> str:
+def server() -> str:
     """Launch Gunicorn integration test server using command line.
 
     - Start a test instance of Gunicorn in a child process
@@ -148,8 +147,8 @@ def test_track_path(tracker: RedisTracker, server: str):
     assert task.path == "/folder"
 
 
-def test_track_ multiple(tracker: RedisTracker, server: str):
-    """Check we get path tracked correctly."""
+def test_track_multiple(tracker: RedisTracker, server: str):
+    """Check multiple requests get tracked correctly."""
 
     assert len(tracker.get_completed_tasks()) == 0
 
@@ -161,6 +160,3 @@ def test_track_ multiple(tracker: RedisTracker, server: str):
     time.sleep(0.100)
 
     assert len(tracker.get_completed_tasks()) == 3
-
-
-
