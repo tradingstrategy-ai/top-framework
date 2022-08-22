@@ -10,6 +10,9 @@ from top.core.tracker import Tracker
 from top.core.task import Task
 
 
+DEFAULT_MAX_COMPLETED_TASKS = 50
+
+
 class RedisTracker(Tracker):
     """Manage task status in Redis.
 
@@ -117,26 +120,36 @@ class RedisTracker(Tracker):
 
     @staticmethod
     def create_default_instance(task_type: Type[Task],
-                                env_var_name="TOP_REDIS_URL",
-                                max_past_tasks=50) -> "RedisTracker":
+                                redis_url_env="TOP_TRACKER_URL",
+                                max_past_tasks_env="TOP_MAX_COMPLETED_TASKS",
+                                max_past_tasks=None) -> "RedisTracker":
         """Creates a connection to the Redis database.
 
         :param task_type:
             Subclass of Task or Task class itself.
             Used to serialise/deserialise data to Redis.
 
-        :param env_var_name:
+        :param redis_url_env:
             This environment variable contains the Redis URL where to connect
 
         :param max_past_tasks:
-            How many tasks to keep in the past events log
+            How many tasks to keep in the past events log.
+            If not given read `max_past_tasks_env` environment variable.
+            If not available default to :py:var:`DEFAULT_MAX_COMPLETED_TASKS`.
         """
 
-        redis_url = os.environ.get(env_var_name)
-        if not redis_url:
-            raise RuntimeError(f"You must configure Redis connection URL with {env_var_name} environment variable")
+        redis_url_env = os.environ.get(redis_url_env)
+        if not redis_url_env:
+            raise RuntimeError(f"You must configure Redis connection URL with {redis_url_env} environment variable")
 
-        pool = ConnectionPool.from_url(redis_url)
+        if not max_past_tasks:
+            max_past_tasks = os.environ.get(max_past_tasks_env)
+            if not max_past_tasks:
+                max_past_tasks = DEFAULT_MAX_COMPLETED_TASKS
+            else:
+                max_past_tasks = int(max_past_tasks)
+
+        pool = ConnectionPool.from_url(redis_url_env)
         client = StrictRedis(connection_pool=pool)
 
         return RedisTracker(client, task_type, max_past_tasks)

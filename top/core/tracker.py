@@ -10,6 +10,21 @@ class Tracker(abc.ABC):
     """Task tracker backend interface definition."""
 
     @abc.abstractmethod
+    def clear(self):
+        """Clear the tracker from old/dangling tasks.
+
+        For example if the server has
+
+        - Crashed
+
+        - Restarted
+
+        Get rid of any stale data.
+
+        Can be called on the web server start.
+        """
+
+    @abc.abstractmethod
     def start_task(self, task: Task):
         pass
 
