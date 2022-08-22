@@ -1,11 +1,24 @@
 import datetime
+
 from dataclasses import fields
-from typing import List
+from typing import List, Optional, Protocol
 
 from rich.table import Table
 
 from top.core.task import Task
 
+
+class ColourFunction(Protocol):
+    """Define row colour by a function."""
+
+    def __call__(self, task: Task) -> str:
+        """Get a row colour for a task.
+
+        See `Rich colour names <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`__.
+
+        :return:
+            One of colour names
+        """
 
 def prepare_row(task: Task,
                 columns: List[str],
@@ -61,7 +74,9 @@ def fill_tasks_table(
         tasks: List[Task],
         columns: List[str],
         column_mappings: dict,
-        max_rows: int):
+        max_rows: int,
+        colour_function: Optional[ColourFunction]=None,
+):
     """Fill a Rich table with tasks as rows.
 
     Tasks are added as rows to the table, from top to bottom.
@@ -78,6 +93,9 @@ def fill_tasks_table(
     :param column_mappings:
         Task attribute to human-readable column mappings
 
+    :param colour_function:
+        A function to decide row colour based on task
+
     :param max_rows:
         How many rows we can fit on the console screen before overflow
     """
@@ -86,3 +104,7 @@ def fill_tasks_table(
     for task in tasks:
         values = prepare_row(task, columns, column_mappings)
         table.add_row(*values)
+
+    if colour_function:
+        row_styles = [colour_function(t) for t in tasks]
+        table.row_styles = row_styles

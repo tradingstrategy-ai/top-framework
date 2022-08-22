@@ -17,7 +17,9 @@ from rich.table import Table
 from top.integration import get_tracker_by_url_config
 from top.redis.tracker import RedisTracker
 from top.tui.row import fill_tasks_table
-from top.web.column import default_active_columns, default_completed_columns, http_task_column_mappings
+from top.web.colour import color_by_status
+from top.web.column import default_active_columns, default_completed_columns, http_task_column_mappings, \
+    default_recent_columns
 from top.web.task import HTTPTask
 
 
@@ -120,7 +122,7 @@ def live(
 @app.command()
 def recent(
     tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
-    columns: str = typer.Option(", ".join(default_completed_columns), envvar="TOP_RECENT_COLUMNS", help="Comma separated list of columns to be displayed for HTTP requests"),
+    columns: str = typer.Option(", ".join(default_recent_columns), envvar="TOP_RECENT_COLUMNS", help="Comma separated list of columns to be displayed for HTTP requests"),
     mode: RecentMode = typer.Option("all", envvar="TOP_RECENT_MODE", help="Do we print all, active or complete requests"),
     limit: int = typer.Option(50, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
 ):
@@ -148,7 +150,14 @@ def recent(
 
     table = Table(*columns, title=f"HTTP requests ({len(tasks)})")
 
-    fill_tasks_table(table, tasks, columns, http_task_column_mappings, limit)
+    fill_tasks_table(
+        table,
+        tasks,
+        columns,
+        http_task_column_mappings,
+        limit,
+        color_by_status,
+    )
 
     console = Console()
     console.print(table)

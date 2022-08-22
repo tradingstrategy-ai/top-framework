@@ -9,7 +9,8 @@ http_task_column_mappings = {
     "Ago": "get_ago",
     "Resp": "status_code",
     "IP": "client_ip_address",
-    "Length": "get_content_length"
+    "Length": "get_content_length",
+    "User agent": "get_user_agent",
 }
 
 default_active_columns = [
@@ -26,4 +27,15 @@ default_completed_columns = [
     "Method",
     "Path",
     "Length",
+]
+
+default_recent_columns = [
+    "Ago",
+    "Resp",
+    "Method",
+    "Path",
+    "Length",
+    "IP",
+    "Duration",
+    "User agent"
 ]
