@@ -129,7 +129,7 @@ def test_track_gunicorn(tracker: RedisTracker, server: str):
     assert task.get_user_agent().startswith("python-requests/")
     assert task.client_ip_address == "127.0.0.1"
 
-    assert task.get_content_length() == 100
+    assert task.get_content_length() == 14
 
 
 def test_track_path(tracker: RedisTracker, server: str):

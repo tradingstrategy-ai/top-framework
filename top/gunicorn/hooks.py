@@ -46,5 +46,6 @@ def post_request(worker: Worker, req: Request, environ: dict, resp: Response):
 
     task.status_code = resp.status_code
     task.status_message = resp.status
+    task.response_headers = resp.headers
 
     tracker.end_task(task)

@@ -63,7 +63,7 @@ class HTTPTask(Task):
         else:
             return f"<{self.method} {self.path} {params}>"
 
-    def get_single_request_header(self, name: str) -> str:
+    def get_single_request_header(self, name: str) -> Optional[str]:
         """Get a value of a single HTTP header in a request.
 
         :param name:
@@ -76,6 +76,9 @@ class HTTPTask(Task):
             The header value
         """
 
+        if not self.request_headers:
+            return None
+
         retval = None
         for header, value in self.request_headers:
             if header.upper() == name.upper():
@@ -84,7 +87,7 @@ class HTTPTask(Task):
 
         return retval
 
-    def get_single_response_header(self, name: str) -> str:
+    def get_single_response_header(self, name: str) -> Optional[str]:
         """Get a value of a single HTTP header in a response.
 
         :param name:
@@ -96,6 +99,9 @@ class HTTPTask(Task):
         :return:
             The header value
         """
+
+        if not self.response_headers:
+            return None
 
         retval = None
         for header, value in self.response_headers:
