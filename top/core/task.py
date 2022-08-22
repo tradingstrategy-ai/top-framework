@@ -141,7 +141,7 @@ class Task:
         Can be called only for completed tasks.
         """
         assert self.ended_at
-        return datetime.datetime.utcnow() - self.ended_at
+        return datetime.datetime.now(datetime.timezone.utc) - self.ended_at
 
     def serialise(self) -> bytes:
         """Serialise using dataclasS_json"""
@@ -154,7 +154,10 @@ class Task:
         return cls.from_json(blob)
 
     @classmethod
-    def create_from_current_thread(cls, task_id: Union[str, int], **kwargs) -> "Task":
+    def create_from_current_thread(cls,
+                                   task_id: Union[str, int],
+                                   processor_name: Optional[str] = None,
+                                   **kwargs) -> "Task":
         """Create a task and assuming the processor is the current OS thread.
 
         Automatically labels the task to belong to the OS
@@ -170,6 +173,9 @@ class Task:
             Something unique to identify this task.
             If nothing else then use Python object hash.
 
+        :param processor_name:
+            Framework specific name for this processor
+
         :param kwargs:
             Passed to :py:class:`Task` dataclass constructor.
 
@@ -179,7 +185,9 @@ class Task:
         tid = threading.get_ident()
 
         thread_name = threading.current_thread().name
-        processor_name = f"{pid}:{thread_name}" or kwargs.get("processor_name")
+
+        if not processor_name:
+            processor_name = f"{pid}:{thread_name}"
 
         return cls(
             task_id=task_id,

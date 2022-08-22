@@ -120,4 +120,28 @@ def test_track_gunicorn(tracker: RedisTracker, server: str):
 
     assert task.status_code == 200
     assert task.status_message == "200 OK"
+    assert task.path == "/"
+    assert task.get_ago() > datetime.timedelta(0)
+    assert task.get_duration() > datetime.timedelta(0)
+
+    assert task.get_host() == "localhost:9999"
+    assert task.get_accept_encoding() == "gzip, deflate"
+    assert task.get_user_agent().startswith("python-requests/")
+    assert task.client_ip_address == "127.0.0.1"
+
+
+def test_track_path(tracker: RedisTracker, server: str):
+    """Check we get path tracked correctly."""
+
+    assert len(tracker.get_completed_tasks()) == 0
+
+    resp = requests.get(f"{server}/folder")
+    assert resp.status_code == 200
+
+    # Give Redis time to sync
+    time.sleep(0.100)
+
+    task: HTTPTask = tracker.get_completed_tasks()[0]
+
+    assert task.path == "/folder"
 

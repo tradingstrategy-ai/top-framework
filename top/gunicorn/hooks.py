@@ -24,13 +24,15 @@ def when_ready(server):
 
 def pre_request(worker: Worker, req: Request):
     """Gunicorn pre_request hook."""
-    worker.log.error("%s %s" % (req.method, req.path))
 
     task_id = id(req)
     task = HTTPTask.create_from_current_thread(
         task_id,
         path=req.path,
         method=req.method,
+        processor_name=str(worker),
+        request_headers=req.headers,
+        client_ip_address=str(req.peer_addr[0]),  # ip, port tuple
     )
     tracker.start_task(task)
 
