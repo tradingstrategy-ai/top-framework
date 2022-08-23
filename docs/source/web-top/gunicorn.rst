@@ -1,3 +1,5 @@
+.. _gunicorn:
+
 Gunicorn integration
 --------------------
 
@@ -16,7 +18,7 @@ Set `web-top` configuration
     export TOP_TRACKER_URL="redis://localhost:7777/15"
 
 Create a Gunicorn config file where tracking hooks are set.
-Example `gunicorn-config-example.py:
+Example `gunicorn-config-example.py`:
 
 .. code-block:: python
 

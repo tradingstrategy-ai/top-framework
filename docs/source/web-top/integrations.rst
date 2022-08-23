@@ -1,4 +1,4 @@
-Supported integrations
+Available integrations
 ======================
 
 Web servers
@@ -14,3 +14,4 @@ Tracking backends
 These will store data about active HTTP requests and responses:
 
 - `Redis <https://redis.io/>`_
+

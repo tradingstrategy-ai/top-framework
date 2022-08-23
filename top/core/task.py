@@ -15,36 +15,43 @@ from top.core.encoding import encode_date, decode_date
 @dataclass_json
 @dataclass
 class Task:
-    """A generic structure for tracking tasks across processors.
+    """A generic structure for tracking tasks across workers.
 
     All fields are optional for maximum flexibility.
 
     `dataclasses_json library <https://github.com/lidatong/dataclasses-json>`_ is used to automatically
-    convert Python :py:mod:`dataclass` structures to JSON and back.
-
-    All timestamps are encoded as ISO-8601 strings.
+    convert Python :py:mod:`dataclasses` structures to JSON and back.
     """
 
-    #: UNIX process that started this task
+    #: OS process id that started this task.
+    #:
     process_id: Optional[int] = None
 
-    #: UNIX thread that started this task
+    #: OS thread that started this task.
+    #:
     thread_id: Optional[int] = None
 
     #: If the application provides further ids for the processes.
+    #:
     #: E.g. connection id in PostgreSQL
     process_internal_id: Optional[str] = None
 
+    #: Unique identified for this task.
+    #:
     #: E.g. web request id if available.
     #: Depends on the application.
     #: Can be int or str depending on the context.
+    #:
+    #:
+    #:
     task_id: Optional[Union[int, str]] = None
 
     #: Human readable of the processor name is available
     processor_name: Optional[str] = None
 
     #: When this task was started.
-    #: UTC timestamp, naive (no timezone).
+    #:
+    #: UTC timestamp serialised as ISO 8601.
     #: Automatically filled by :py:meth:`create_from_current_thread`.
     started_at: Optional[datetime.datetime] = field(
         default=None,
@@ -54,8 +61,9 @@ class Task:
             mm_field=fields.DateTime(format='iso')
         )
     )
-    #: When this task was startead
-    #: UTC timestamp, naive (no timezone)
+    #: When this task was last updated.
+    #:
+    #: UTC timestamp serialised as ISO 8601.
     updated_at: Optional[datetime.datetime] = field(
         default=None,
         metadata=config(
@@ -66,6 +74,8 @@ class Task:
     )
 
     #: When this task was ended.
+    #:
+    #: UTC timestamp serialised as ISO 8601.
     #: Automatically filled by :py:meth:`top.core.tracker.Tracker.end_task`.
     ended_at: Optional[datetime.datetime] = field(
         default=None,
@@ -78,8 +88,8 @@ class Task:
     #: Did this task success?
     #:
     #: None = we do not know yet.
-    #: true = task received its end_task() call.
-    #: false = task was cleaned up by monitor/timeout.
+    #: True = task received its end_task() call.
+    #: False = task was cleaned up by monitor/timeout.
     recorded_successfully: Optional[bool] = None
 
     #: Generic tracking tags that can be associated with tasks.
@@ -91,7 +101,7 @@ class Task:
     #: Kubernetes/Docker/other deployment information and such,
     #:
     #: Here you can add any tags to the request.
-    #: When :py:meth:`top.core.tracker.Tracker.start_request`
+    #: When :py:meth:`top.core.tracker.Tracker.start_task`
     #: is called, the tracker specific tags are automatically
     #: applied here.
     #:

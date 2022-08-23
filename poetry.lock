@@ -658,6 +658,18 @@ sphinx = ">=4.0,<6.0"
 docs = ["ipython", "sphinx-inline-tabs", "sphinx-copybutton", "myst-parser", "furo"]
 
 [[package]]
+name = "sphinx-sitemap"
+version = "2.2.0"
+description = "Sitemap generator for Sphinx"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+sphinx = ">=1.2"
+
+[[package]]
 name = "sphinxcontrib-applehelp"
 version = "1.0.2"
 description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books"
@@ -858,7 +870,7 @@ gunicorn = ["gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "638999f8d036c0605d22ddaf616e3cf666d603156d3ee41c6cb5e622588f5d6a"
+content-hash = "d3bd98f0acb19de9c5a6f5b608cdc5a44d4d3ed5a26657f009b0b3c08a44f8c5"
 
 [metadata.files]
 alabaster = []
@@ -917,6 +929,7 @@ snowballstemmer = []
 soupsieve = []
 sphinx = []
 sphinx-basic-ng = []
+sphinx-sitemap = []
 sphinxcontrib-applehelp = []
 sphinxcontrib-devhelp = []
 sphinxcontrib-htmlhelp = []

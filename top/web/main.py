@@ -25,7 +25,7 @@ from top.web.task import HTTPTask
 
 
 help_text = """
-web-mon is an interactive HTTP request monitor.
+web-top is an interactive HTTP request monitor.
 
 For more information see https://github.com/tradingstrategy-ai/top-framework
 """

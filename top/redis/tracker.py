@@ -22,6 +22,30 @@ class RedisTracker(Tracker):
 
     - It is recommended to give its own database for task tracking;
       do not share other databases (even though this works in theory)
+
+    How to start tracking a (web) task:
+
+    .. code-block:: python
+
+            task_id = id(req)
+            task = HTTPTask.create_from_current_thread(
+                task_id,
+                path=req.path,
+                method=req.method,
+                processor_name=str(worker),
+                request_headers=req.headers,
+            )
+            tracker.start_task(task)
+
+    Example how to finish a (web) task:
+
+    .. code-block:: python
+
+        task.status_code = resp.status_code
+        task.status_message = resp.status
+        task.response_headers = resp.headers
+
+        tracker.end_task(task)
     """
 
     def __init__(self,
@@ -141,7 +165,7 @@ class RedisTracker(Tracker):
         :param max_past_tasks:
             How many tasks to keep in the past events log.
             If not given read `max_past_tasks_env` environment variable.
-            If not available default to :py:var:`DEFAULT_MAX_COMPLETED_TASKS`.
+            If not available default to :py:data:`DEFAULT_MAX_COMPLETED_TASKS`.
         """
 
         redis_url_env = os.environ.get(redis_url_env)

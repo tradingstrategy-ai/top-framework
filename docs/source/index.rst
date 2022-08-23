@@ -1,21 +1,43 @@
-.. Top Framework documentation master file, created by
-   sphinx-quickstart on Sun Aug 21 23:18:36 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Top Framework
+=============
 
-Welcome to Top Framework's documentation!
-=========================================
+Top framework is a Python library to build UNIX `top` like applications
+to display active and complete tasks in a terminal. With only
+dozens of lines of Python you can spin up your text user interface (TUI)
+tool for monitoring your tasks or requests.
+
+It comes with a default application :doc:`web-top <web-top/index>`
+to display active HTTP requests of your web server.
+
+Top framework is build on `Rich <https://github.com/Textualize/rich>`_ text user interface rendering library.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Applications
 
-    web-top/index
-    design-goals
-    data-structure
-    security
-    troubleshooting
-    tests
+   web-top/index
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Framework
+
+   design-goals
+   data-structure
+   redis
+   security
+   troubleshooting
+   tests
+   reference/index
+
+
+More information
+================
+
+* `README <https://github.com/tradingstrategy-ai/top-framework>`_
+* `Github <https://github.com/tradingstrategy-ai/top-framework>`_
+* `Discord <https://tradingstrategy.ai/community>`_
+* `Twitter <https://twitter.com/TradingProtocol/>`_
+* `Newsletter <https://newsletter.tradingstrategy.ai/>`_
 
 Indices and tables
 ==================

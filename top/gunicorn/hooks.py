@@ -1,4 +1,6 @@
-"""Gunicorn hooks.
+"""Gunicorn integration for web-top.
+
+This module provides hooks you can refer in Gunicorn config.
 
 See `Gunicorn settings <https://docs.gunicorn.org/en/stable/settings.html>`_
 """
@@ -8,13 +10,18 @@ from gunicorn.http.wsgi import Response
 from gunicorn.workers.base import Worker
 
 from top.integration import get_tracker_by_url_config
+from top.utils import is_sphinx_build
 from top.web.task import HTTPTask
 
 
 #: A global initialisation per worker, etc.
 #: Not sure if gunicorn offers us a smarter approach to do this,
 #: e.g. by worker?
-tracker = get_tracker_by_url_config(HTTPTask)
+if not is_sphinx_build():
+    tracker = get_tracker_by_url_config(HTTPTask)
+else:
+    # Don't crash the docs build
+    tracker = None
 
 
 def when_ready(server):

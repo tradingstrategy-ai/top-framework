@@ -1,5 +1,6 @@
 """Bunch of random utilities."""
 import socket
+import sys
 
 
 def sanitise_string(s: str) -> str:
@@ -20,3 +21,13 @@ def is_localhost_port_listening(port: int, host="localhost") -> bool:
     location = (host, port)
     result_of_check = a_socket.connect_ex(location)
     return result_of_check == 0
+
+
+def is_sphinx_build() -> bool:
+    """Are modules are being imported under sphinx-build command.
+
+    For example, Sphinx autosummary will crash if it tries
+    to proces Gunicorn hooks.
+    """
+    command = sys.argv[0]
+    return command.endswith("sphinx-build")

@@ -19,4 +19,4 @@ dist
 
 # docs
 docs/build
-docs/source/**/_autosummary*
+docs/source/**/api*

@@ -26,11 +26,17 @@ class Tracker(abc.ABC):
 
     @abc.abstractmethod
     def start_task(self, task: Task):
-        pass
+        """Start a new task.
+
+        Record a task started in the tracker backend.
+        """
 
     @abc.abstractmethod
     def end_task(self, task: Task):
-        pass
+        """Finish exisiting task.
+
+        Mark task completed.
+        """
 
     @abc.abstractmethod
     def get_active_tasks(self) -> Dict[str, Task]:

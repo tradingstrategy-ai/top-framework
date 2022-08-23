@@ -1,6 +1,6 @@
 """Fill HTTP tracker with random dummy data.
 
-- Simulate HTTP request / responses texts
+- Generate random HTTP request / responses serialisations
 
 - Data does not make sense, but give you some interactivity
 
@@ -12,10 +12,14 @@ import time
 from threading import Thread
 
 from top.redis.tracker import RedisTracker
+from top.utils import is_sphinx_build
 from top.web.task import HTTPTask
 
 
-tracker = RedisTracker.create_default_instance(HTTPTask)
+if not is_sphinx_build():
+    tracker = RedisTracker.create_default_instance(HTTPTask)
+else:
+    tracker = None
 
 
 task_counter = 0
