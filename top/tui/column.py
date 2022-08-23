@@ -92,6 +92,8 @@ def determine_enabled_columns(
             result = dynamic_func(tasks)
             if result:
                 enabled.append(result)
+        else:
+            enabled.append(c)
 
     return enabled
 

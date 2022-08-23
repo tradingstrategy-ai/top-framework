@@ -5,9 +5,10 @@ from typer.testing import CliRunner
 
 from top.redis.tracker import RedisTracker
 from top.tui.column import determine_enabled_columns
-from top.web.web_columns import http_task_columns
+
 from top.web.main import app
 from top.web.task import HTTPTask
+from top.web.web_columns import http_task_columns
 
 
 runner = CliRunner()
@@ -46,7 +47,7 @@ def test_dynamic_country_rule(tracker: RedisTracker):
     columns = ["Cty", "IP"]
     columns = determine_enabled_columns(
         columns,
-        http_task_column_mappings,
+        http_task_columns,
         [t]
     )
     assert columns == ['Cty', 'IP']
