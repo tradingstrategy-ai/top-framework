@@ -16,6 +16,8 @@ Top Framework is build on `Rich <https://github.com/Textualize/rich>`_ text user
 Applications
 ------------
 
+Top Framework provides following applications:
+
 .. toctree::
    :maxdepth: 1
 
@@ -24,6 +26,8 @@ Applications
 
 Framework
 ---------
+
+How to use Top Framework to build your own custom tools.
 
 .. toctree::
    :maxdepth: 1
@@ -39,7 +43,7 @@ Framework
 
 
 More information
-================
+----------------
 
 * `README <https://github.com/tradingstrategy-ai/top-framework>`_
 * `Github <https://github.com/tradingstrategy-ai/top-framework>`_
@@ -48,7 +52,7 @@ More information
 * `Newsletter <https://newsletter.tradingstrategy.ai/>`_
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
