@@ -21,18 +21,18 @@ sphinx-sitemap = {version = "^2.2.0", optional = true}
 Sphinx = {version = "^5.1.1", optional = true}
 furo = {version = "^2022.6.21", optional = true}
 sphinx-autodoc-typehints = {version = "^1.16.0", optional = true}
+python-lorem = {version="^1.1.2", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
 ipdb = "^0.13.9"
 psutil = "^5.9.1"
 requests = "^2.28.1"
-python-lorem = "^1.1.2"
 
 
 # https://stackoverflow.com/a/66030875/315168
 [tool.poetry.extras]
-gunicorn = ["gunicorn"]
+gunicorn = ["gunicorn", "python-lorem"]
 docs = ["Sphinx", "sphinx-sitemap", "sphinx-autodoc-typehints", "furo"]
 
 

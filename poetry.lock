@@ -534,7 +534,7 @@ testing = ["xmlschema", "requests", "pygments (>=2.7.2)", "nose", "mock", "hypot
 name = "python-lorem"
 version = "1.1.2"
 description = "Lorem ipsum generator."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -886,7 +886,7 @@ gunicorn = ["gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "e79c50b74701a5e08062c9e40d66c575e2b927c5c9d2775e6e4d2613882c9ba6"
+content-hash = "54ba23ebc1c08f6d263a6ae10c8d337476f90f2350c58b30710bcd6dc4391a80"
 
 [metadata.files]
 alabaster = []
