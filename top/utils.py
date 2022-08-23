@@ -21,23 +21,3 @@ def is_localhost_port_listening(port: int, host="localhost") -> bool:
     location = (host, port)
     result_of_check = a_socket.connect_ex(location)
     return result_of_check == 0
-
-
-def is_sphinx_build() -> bool:
-    """Are modules are being imported under sphinx-build command.
-
-    For example, Sphinx autosummary will crash if it tries
-    to proces Gunicorn hooks.
-    """
-
-    # We all love our lives, yes
-    command = sys.argv[0]
-    if command.endswith("sphinx-build"):
-        return True
-
-    # ReadTheDocs
-    if len(sys.argv) >= 3:
-        if sys.argv[1] == "-m" and sys.argv[2] == "sphinx":
-            return True
-
-    return False

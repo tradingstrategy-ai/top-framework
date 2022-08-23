@@ -17,11 +17,7 @@ from top.web.task import HTTPTask
 #: A global initialisation per worker, etc.
 #: Not sure if gunicorn offers us a smarter approach to do this,
 #: e.g. by worker?
-if not is_sphinx_build():
-    tracker = get_tracker_by_url_config(HTTPTask)
-else:
-    # Don't crash the docs build
-    tracker = None
+tracker = get_tracker_by_url_config(HTTPTask)
 
 
 def when_ready(server):

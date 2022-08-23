@@ -90,3 +90,6 @@ def fixed_init(self, app):
 AutosummaryRenderer.__old_init__ = AutosummaryRenderer.__init__
 AutosummaryRenderer.__init__ = fixed_init
 
+# Tell import time Python code that this is Sphinx invocation
+import os
+os.environ["SPHINX_BUILD"] = "true"

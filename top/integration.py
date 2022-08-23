@@ -11,13 +11,19 @@ class NoTrackerAvailableException(Exception):
     """No tracker backend configured."""
 
 
-def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str]=None) -> Tracker:
+def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str]=None) -> Optional[Tracker]:
     """Resolve tracker by its configuration URL.
 
     Reads `TOP_TRACKER_URL` and `TOP_MAX_COMPLETED_TASKS`
     environment variables.
 
     Currently only `redis://` supported.
+
+    Because this code is run during Python module import,
+    we will detect conditions based on environment variables
+    like `READTHEDOCS` to allow us to shortcut the logic
+    and not try to create tracker connection during docs
+    build.
 
     :param url:
         The URL that defines connection to the tracker backend.
@@ -27,6 +33,10 @@ def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str]=None) ->
         Subclass of Task or Task class itself.
         Used to serialise/deserialise data to Redis.
     """
+
+    # https://docs.readthedocs.io/en/stable/environment-variables.html
+    if os.environ.get("READTHEDOCS") or os.environ.get("SPHINX_BUILD"):
+        return None
 
     if not url:
         url = os.environ.get("TOP_TRACKER_URL")

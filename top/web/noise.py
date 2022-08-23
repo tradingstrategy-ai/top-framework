@@ -12,14 +12,10 @@ import time
 from threading import Thread
 
 from top.redis.tracker import RedisTracker
-from top.utils import is_sphinx_build
 from top.web.task import HTTPTask
 
 
-if not is_sphinx_build():
-    tracker = RedisTracker.create_default_instance(HTTPTask)
-else:
-    tracker = None
+tracker = RedisTracker.create_default_instance(HTTPTask)
 
 
 task_counter = 0
