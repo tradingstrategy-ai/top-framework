@@ -1,41 +1,37 @@
-A generic Python framework for writing UNIX top like Text User Interface applications.
+Top framework is a Python library for writing UNIX top like Text User Interface applications.
 
-It comes with a `web-top` application to give `top` like monitoring tool
-for HTTP requests on any web server.
+It comes with [web-top](https://github.com/tradingstrategy-ai/web-top),
+a`top` like monitoring tool for HTTP requests and responses on any web server.
 
 ![screenshot](https://raw.githubusercontent.com/tradingstrategy-ai/top-framework/master/docs/source/web-top/screenshot2.png)
 
 # Use cases
 
-- HTTP request trackers for web servers
-- Active task trackers for Cron/Celery/other background job managers
+The goal of Top framework is to make is easy to roll out 
+custom live monitoring tools with text user interface quickly.
+Sometimes you just need to log in to your server and see what's going on.
+Top tools are is ideal for observing and catching issues when they happen.
+These tools are supplement for Application Performance Management (APM),
+metrics like statsd and Prometheus and logging.
 
-The core concepts of the framework are *processors*, usually OS processes/threads
-that are currently handling active *tasks*. Depending on the context a task 
-can be a HTTP request, a UNIX process, or something else.
+Monitoring use cases you might have include:
 
-# Dependencies
+- HTTP request/response trackers for web servers
 
-- Python 3.9+
-- Redis: Used to track started/ended tasks
+- Background job trackers for Cron, Celery and other background job managers
 
-The task tracking backend is abstract: If you do not want to use Redis you can replace
-with your own solution as the interface is only few lines of Python.
+# Documentation
 
-# Overview
+- [Browse Sphinx documentation](https://top-framework.readthedocs.io/)
 
-The *Top Framework* consists of few parts
+# Community 
 
-- *Tracker backend*: to track and store tasks are currently active and completed 
-- *Client library*: to emit events when a task starts and ends
-- *Text user interface*: A command line application that gives you a nice `top` view over your tasks,
-  acting as a client for the tracker backend
- 
-# Design goals
+- [Join Discord for any questions](https://tradingstrategy.ai/community)
 
-See documentation
+# Social media
 
-# Data structures
+- [Follow on Twitter](https://twitter.com/TradingProtocol)
+- [Follow on Telegram](https://t.me/trading_protocol)
+- [Follow on LinkedIn](https://www.linkedin.com/company/trading-strategy/)
 
-See documentation
 
