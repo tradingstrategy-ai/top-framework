@@ -7,4 +7,4 @@ Then:
 
 .. code-block:: shell
 
-    poetry install -E docs
+    poetry install -E gunicorn,docs

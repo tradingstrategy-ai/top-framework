@@ -29,5 +29,15 @@ def is_sphinx_build() -> bool:
     For example, Sphinx autosummary will crash if it tries
     to proces Gunicorn hooks.
     """
+
+    # We all love our lives, yes
     command = sys.argv[0]
-    return command.endswith("sphinx-build")
+    if command.endswith("sphinx-build"):
+        return True
+
+    # ReadTheDocs
+    if len(sys.argv) >= 3:
+        if sys.argv[1] == "-m" and sys.argv[2] == "sphinx":
+            return True
+
+    return False
