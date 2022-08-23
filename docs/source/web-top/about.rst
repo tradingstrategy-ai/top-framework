@@ -11,7 +11,7 @@ Features
 
 - Easily integrate with any web server
 
-- Display active active and completed HTTP requests/responses
+- Display active and recently completed HTTP requests/responses
 
 - Live top-like monitoring
 
