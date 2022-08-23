@@ -535,7 +535,7 @@ name = "python-lorem"
 version = "1.1.2"
 description = "Lorem ipsum generator."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [[package]]
@@ -881,12 +881,12 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 
 [extras]
 docs = ["Sphinx", "sphinx-sitemap", "sphinx-autodoc-typehints", "furo"]
-gunicorn = ["gunicorn"]
+gunicorn = ["gunicorn", "python-lorem"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "54ba23ebc1c08f6d263a6ae10c8d337476f90f2350c58b30710bcd6dc4391a80"
+content-hash = "a46f2d5eb07d68793215251e1f37ef23e867a814902f464e66a00a6d2fdefe8a"
 
 [metadata.files]
 alabaster = []
