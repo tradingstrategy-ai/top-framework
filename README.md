@@ -38,4 +38,6 @@ Monitoring use cases you might have include:
 - [Follow on Telegram](https://t.me/trading_protocol)
 - [Follow on LinkedIn](https://www.linkedin.com/company/trading-strategy/)
 
+# License
 
+MIT.
