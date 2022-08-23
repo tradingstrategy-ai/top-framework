@@ -1,8 +1,7 @@
 import unicodedata
 from dataclasses import dataclass
-from typing import Optional, List, Tuple, Dict
+from typing import Optional, List, Tuple
 
-import flag
 from dataclasses_json import dataclass_json
 
 from top.core.task import Task

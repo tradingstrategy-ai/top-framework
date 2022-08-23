@@ -1,26 +1,58 @@
-"""HTTP task colouring."""
+"""HTTP task colouring.
+
+`See the colour map <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`_.
+"""
+from typing import Optional
+
 from top.web.task import HTTPTask
 
 
-def colour_by_status(t: HTTPTask):
+def colour_row_by_status(t: HTTPTask):
     """Set row colour by its HTTP status.
 
-    `See the colour map <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`_.
+    """
+    return map_status_code_colour(t, t.status_code)
+
+
+def colour_row_by_duration(t: HTTPTask):
+    """Set row colour by its duration.
+
     """
 
-    if not t.status_code:
+    duration = t.get_duration().total_seconds()
+    return map_duration_colour(t, duration)
+
+
+def map_duration_colour(task: HTTPTask, duration: Optional[float]):
+    """Get row/value colour for request duration."""
+    if not duration:
+        return "white"
+    if duration < 1.0:
+        return "green"
+    elif duration < 2.5:
+        return "yellow"
+    else:
+        return "red"
+
+
+def map_status_code_colour(t: HTTPTask, status_code: Optional[int]):
+    """Set row colour by its HTTP status.
+
+    """
+
+    if not status_code:
         # Still active
         return "white"
-    elif t.status_code < 300:
+    elif status_code < 300:
         # 200-299 good
         return "green"
-    elif t.status_code < 400:
+    elif status_code < 400:
         # 300-399 redirect
         return "yellow"
-    elif t.status_code < 500:
+    elif status_code < 500:
         # 400-499 redirect
         return "red"
-    elif t.status_code >= 500 and t.status_code < 600:
+    elif status_code >= 500 and status_code < 600:
         # 500+ bad
         return "red"
     else:
@@ -28,16 +60,3 @@ def colour_by_status(t: HTTPTask):
         return "bright_magenta"
 
 
-def colour_by_duration(t: HTTPTask):
-    """Set row colour by its duration.
-
-    `See the colour map <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`_.
-    """
-
-    duration = t.get_duration().total_seconds()
-    if duration < 1.0:
-        return "green"
-    elif duration < 2.5:
-        return "yellow"
-    else:
-        return "red"

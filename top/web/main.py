@@ -16,10 +16,10 @@ from rich.table import Table
 
 from top.integration import get_tracker_by_url_config
 from top.redis.tracker import RedisTracker
-from top.tui.column import create_column, determine_enabled_columns
+from top.tui.column import create_rich_column, determine_enabled_columns
 from top.tui.row import fill_tasks_table
-from top.web.colour import colour_by_status, colour_by_duration
-from top.web.column import default_active_columns, default_completed_columns, http_task_column_mappings, \
+from top.web.colour import colour_row_by_status, colour_row_by_duration
+from top.web.web_columns import default_active_columns, default_completed_columns, http_task_columns, \
     default_recent_columns
 from top.web.task import HTTPTask
 
@@ -56,14 +56,14 @@ def create_ui(
     active_columns = determine_enabled_columns(active_columns, column_mappings, active_tasks)
     completed_columns = determine_enabled_columns(completed_columns, column_mappings, completed_tasks)
 
-    active = Table(*[create_column(c, column_mappings) for c in active_columns],
+    active = Table(*[create_rich_column(c, column_mappings) for c in active_columns],
                    title=f"Active HTTP requests ({len(active_tasks)})",
                    width=width,
                    border_style="bright_black",
                    )
 
-    past = Table(*[create_column(c, column_mappings) for c in completed_columns],
-                   title=f"Completed HTTP responses ({len(completed_tasks)})",
+    past = Table(*[create_rich_column(c, column_mappings) for c in completed_columns],
+                 title=f"Completed HTTP responses ({len(completed_tasks)})",
                  width=width,
                  border_style="bright_black",
                  )
@@ -86,7 +86,7 @@ def create_ui(
         active_columns,
         column_mappings,
         height // 2 - 5,
-        colour_by_duration)
+        colour_row_by_duration)
 
     fill_tasks_table(
         past,
@@ -94,7 +94,7 @@ def create_ui(
         completed_columns,
         column_mappings,
         height // 2 - 5,
-        colour_by_status)
+        colour_row_by_status)
 
     return layout
 
@@ -133,7 +133,7 @@ def live(
                 tracker,
                 active_columns,
                 completed_columns,
-                http_task_column_mappings,
+                http_task_columns,
                 console.size.width,
                 console.size.height)
             live.update(ui, refresh=True)
@@ -169,7 +169,7 @@ def recent(
     else:
         tasks = active_tasks + completed_tasks
 
-    columns = determine_enabled_columns(columns, http_task_column_mappings, tasks)
+    columns = determine_enabled_columns(columns, http_task_columns, tasks)
 
     table = Table(*columns, title=f"HTTP requests ({len(tasks)})")
 
@@ -177,9 +177,9 @@ def recent(
         table,
         tasks,
         columns,
-        http_task_column_mappings,
+        http_task_columns,
         limit,
-        colour_by_status,
+        colour_row_by_status,
     )
 
     console = Console()

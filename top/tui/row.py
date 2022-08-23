@@ -8,7 +8,7 @@ from rich.table import Table
 from top.core.task import Task
 
 
-class ColourFunction(Protocol):
+class RowColourFunction(Protocol):
     """Define row colour by a function."""
 
     def __call__(self, task: Task) -> str:
@@ -43,7 +43,7 @@ def prepare_row(task: Task,
 
     result = []
     for c in columns:
-        key = column_mappings[c][0]
+        key = column_mappings[c].accessor
 
         if key in dataclass_fields:
             val = getattr(task, key)
@@ -74,8 +74,8 @@ def fill_tasks_table(
         tasks: List[Task],
         columns: List[str],
         column_mappings: dict,
-        max_rows: int,
-        colour_function: Optional[ColourFunction]=None,
+        max_rows: Optional[int] = None,
+        colour_function: Optional[RowColourFunction]=None,
 ):
     """Fill a Rich table with tasks as rows.
 
@@ -99,7 +99,9 @@ def fill_tasks_table(
     :param max_rows:
         How many rows we can fit on the console screen before overflow
     """
-    tasks = tasks[0:max_rows]
+
+    if max_rows:
+        tasks = tasks[0:max_rows]
 
     for task in tasks:
         values = prepare_row(task, columns, column_mappings)
