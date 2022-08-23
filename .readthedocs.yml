@@ -1,0 +1,22 @@
+# .readthedocs.yml
+# https://github.com/readthedocs/readthedocs.org/issues/4912#issuecomment-664002569
+
+version: 2
+
+sphinx:
+  configuration: docs/source/conf.py
+
+build:
+  image: testing
+
+# Python 3.9?
+# https://docs.readthedocs.io/en/stable/config-file/v2.html#build-beta-specification
+# https://github.com/readthedocs/readthedocs.org/issues/7554
+python:
+  version: 3.9
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - gunicorn
+        - dev
