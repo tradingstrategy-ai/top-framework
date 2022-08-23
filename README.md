@@ -1,3 +1,7 @@
+[![Automated test suite](https://github.com/tradingstrategy-ai/top-framework/actions/workflows/test.yml/badge.svg)](https://github.com/tradingstrategy-ai/top-framework/actions/workflows/test.yml)
+
+[![Documentation Status](https://readthedocs.org/projects/top-framework/badge/?version=latest)](https://top-framework.readthedocs.io/en/latest/?badge=latest)
+
 Top Framework is a Python library for writing UNIX top like Text User Interface applications.
 
 It comes with [web-top](https://github.com/tradingstrategy-ai/web-top),
