@@ -6,6 +6,8 @@ to display active and complete tasks in a terminal. With only
 dozens of lines of Python you can spin up your text user interface (TUI)
 tool for monitoring your tasks or requests.
 
+.. image:: web-top/screenshot2.png
+
 It comes with a default application :doc:`web-top <web-top/index>`
 to display active HTTP requests of your web server.
 
