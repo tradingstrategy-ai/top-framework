@@ -13,15 +13,20 @@ to display active HTTP requests of your web server.
 
 Top Framework is build on `Rich <https://github.com/Textualize/rich>`_ text user interface rendering library.
 
+Applications
+------------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Applications
+
 
    web-top/index
 
+Framework
+---------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Framework
 
    design-goals
    data-structure
