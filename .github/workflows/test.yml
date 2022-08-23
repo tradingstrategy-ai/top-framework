@@ -7,8 +7,23 @@ on:
     branches: [ master ]
 
 jobs:
+
   test-python:
     runs-on: ubuntu-latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
       - name: Install poetry
@@ -24,6 +39,8 @@ jobs:
           poetry install -E data
       - name: Run test scripts
         run: poetry run pytest
+        env:
+            TOP_TRACKER_URL: redis://localhost:6379/15
       - name: Run flake8
         uses: reviewdog/action-flake8@v3
         with:
