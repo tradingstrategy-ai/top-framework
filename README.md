@@ -1,4 +1,4 @@
-Top framework is a Python library for writing UNIX top like Text User Interface applications.
+Top Framework is a Python library for writing UNIX top like Text User Interface applications.
 
 It comes with [web-top](https://github.com/tradingstrategy-ai/web-top),
 a`top` like monitoring tool for HTTP requests and responses on any web server.
@@ -7,7 +7,7 @@ a`top` like monitoring tool for HTTP requests and responses on any web server.
 
 # Use cases
 
-The goal of Top framework is to make is easy to roll out 
+The goal of Top Framework is to make is easy to roll out 
 custom live monitoring tools with text user interface quickly.
 Sometimes you just need to log in to your server and see what's going on.
 Top tools are is ideal for observing and catching issues when they happen.
