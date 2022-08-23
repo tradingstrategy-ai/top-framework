@@ -11,7 +11,7 @@ We have ready integrations to get data out from these web servers:
 Tracking backends
 -----------------
 
-These will store data about active HTTP requests and responses:
+Tracking backend is needed to store and serve information about active HTTP requests and responses.
 
 - `Redis <https://redis.io/>`_
 

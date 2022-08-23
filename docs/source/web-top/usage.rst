@@ -96,24 +96,39 @@ Recent requests
 
 Display the most recently completed HTTP requests in the terminal.
 
-                                                                                                               HTTP requests (1026)
-    ┏━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━━━┳━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-    ┃ Cty ┃ IP              ┃ Ago  ┃ Duration ┃ Resp ┃ Method ┃ Path                 ┃ Length  ┃ User agent                                                                                                                                  ┃
-    ┡━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━━━╇━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-    │ US  │ 20.85.75.151    │      │ 0.66     │      │ GET    │ /api/pair-trade-data │         │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.241.218.99   │      │ 0.64     │      │ GET    │ /api/candles         │         │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.85.75.151    │ 0.83 │ 1.71     │ 200  │ GET    │ /api/pair-trade-data │ 304     │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.241.218.99   │ 1.32 │ 0.76     │ 200  │ GET    │ /api/candles         │ 528,032 │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.85.75.151    │ 2.71 │ 1.85     │ 200  │ GET    │ /api/pair-trade-data │ 300     │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.241.218.99   │ 2.91 │ 0.81     │ 200  │ GET    │ /api/candles         │ 685,175 │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.241.218.99   │ 4.34 │ 0.77     │ 200  │ GET    │ /api/candles         │ 363,670 │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.85.75.151    │ 4.76 │ 0.05     │ 200  │ GET    │ /api/pair-details    │ 2,486   │ python-requests/2.27.1                                                                                                                      │
-    │ SG  │ 139.180.132.162 │ 5.37 │ 0.73     │ 200  │ GET    │ /api/candles         │ 12,441  │                                                                                                                                             │
-    │ US  │ 20.241.218.99   │ 5.65 │ 0.05     │ 200  │ GET    │ /api/candles         │ 208,675 │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.241.218.99   │ 5.89 │ 1.96     │ 200  │ GET    │ /api/pair-trade-data │ 291     │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.85.75.151    │ 7.53 │ 0.06     │ 200  │ GET    │ /api/pair-details    │ 2,486   │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 66.249.66.51    │ 7.99 │ 0.85     │ 200  │ GET    │ /api/pair-details    │ 2,658   │ Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Mobile Safari/537.36  │
-    │     │                 │      │          │      │        │                      │         │ (compatible; Googlebot/2.1; +http://www.google.com/bot.html)                                                                                │
-    │ US  │ 20.241.218.99   │ 8.03 │ 2.72     │ 200  │ GET    │ /api/pair-trade-data │ 287     │ python-requests/2.27.1                                                                                                                      │
-    │ US  │ 20.85.75.151    │ 8.19 │ 0.81     │ 200  │ GET    │ /api/candles         │ 2,477   │ python-requests/2.27.1                                                                                                                      │
-    └─────┴─────────────────┴──────┴──────────┴──────┴────────┴──────────────────────┴─────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+.. code-block::
+
+    ┏━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━━━┳━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┓
+    ┃ Cty ┃ IP                      ┃ Ago  ┃ Duration ┃ Resp ┃ Method ┃ Path                    ┃ Length  ┃ User agent              ┃
+    ┡━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━━━╇━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━┩
+    │ US  │ 20.241.218.99           │      │ 0.90     │      │ GET    │ /api/candles            │         │ python-requests/2.27.1  │
+    │ US  │ 20.85.75.151            │      │ 0.51     │      │ GET    │ /api/candles            │         │ python-requests/2.27.1  │
+    │ US  │ 20.85.75.151            │ 0.96 │ 0.79     │ 200  │ GET    │ /api/candles            │ 127,156 │ python-requests/2.27.1  │
+    │ AE  │ 2001:8f8:1d0f:2fcd:535… │ 1.56 │ 0.03     │ 200  │ GET    │ /api/top-momentum       │ 40,212  │ Mozilla/5.0 (iPhone;    │
+    │     │                         │      │          │      │        │                         │         │ CPU iPhone OS 15_6 like │
+    │     │                         │      │          │      │        │                         │         │ Mac OS X)               │
+    │     │                         │      │          │      │        │                         │         │ AppleWebKit/605.1.15    │
+    │     │                         │      │          │      │        │                         │         │ (KHTML, like Gecko)     │
+    │     │                         │      │          │      │        │                         │         │ Version/15.6            │
+    │     │                         │      │          │      │        │                         │         │ Mobile/15E148           │
+    │     │                         │      │          │      │        │                         │         │ Safari/604.1            │
+    │ US  │ 20.241.218.99           │ 1.59 │ 0.83     │ 200  │ GET    │ /api/candles            │ 453,586 │ python-requests/2.27.1  │
+    │ AE  │ 2001:8f8:1d0f:2fcd:535… │ 1.63 │ 0.02     │ 200  │ GET    │ /api/impressive-numbers │ 152     │ Mozilla/5.0 (iPhone;    │
+    │     │                         │      │          │      │        │                         │         │ CPU iPhone OS 15_6 like │
+    │     │                         │      │          │      │        │                         │         │ Mac OS X)               │
+    │     │                         │      │          │      │        │                         │         │ AppleWebKit/605.1.15    │
+    │     │                         │      │          │      │        │                         │         │ (KHTML, like Gecko)     │
+    │     │                         │      │          │      │        │                         │         │ Version/15.6            │
+    │     │                         │      │          │      │        │                         │         │ Mobile/15E148           │
+    │     │                         │      │          │      │        │                         │         │ Safari/604.1            │
+    │ US  │ 20.85.75.151            │ 2.03 │ 0.04     │ 200  │ GET    │ /api/candles            │ 32,915  │ python-requests/2.27.1  │
+    │ US  │ 20.241.218.99           │ 3.03 │ 0.70     │ 200  │ GET    │ /api/candles            │ 303,664 │ python-requests/2.27.1  │
+    │ US  │ 20.85.75.151            │ 3.29 │ 1.84     │ 200  │ GET    │ /api/pair-trade-data    │ 288     │ python-requests/2.27.1  │
+    │ US  │ 20.241.218.99           │ 4.10 │ 0.72     │ 200  │ GET    │ /api/candles            │ 99,651  │ python-requests/2.27.1  │
+    │ HU  │ 81.182.158.125          │ 4.57 │ 0.04     │ 200  │ GET    │ /api/top-momentum       │ 575,510 │ python-requests/2.28.1  │
+    │ US  │ 20.241.218.99           │ 5.06 │ 0.03     │ 200  │ GET    │ /api/candles            │ 21,311  │ python-requests/2.27.1  │
+    │ US  │ 20.85.75.151            │ 5.32 │ 1.86     │ 200  │ GET    │ /api/pair-trade-data    │ 285     │ python-requests/2.27.1  │
+    │ US  │ 20.241.218.99           │ 5.36 │ 1.81     │ 200  │ GET    │ /api/pair-trade-data    │ 302     │ python-requests/2.27.1  │
+    │ US  │ 20.241.218.99           │ 7.33 │ 1.78     │ 200  │ GET    │ /api/pair-trade-data    │ 302     │ python-requests/2.27.1  │
+    └─────┴─────────────────────────┴──────┴──────────┴──────┴────────┴─────────────────────────┴─────────┴─────────────────────────┘
+

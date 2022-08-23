@@ -17,7 +17,7 @@ How does it work
 
 For each task/request we make start end end write in Redis.
 
-See :py:class:`top.redis.tracker.Tracker` class for example.
+See :py:class:`top.redis.tracker.RedisTracker` class for example.
 
 - You can use the class as-is from any Python application
 
