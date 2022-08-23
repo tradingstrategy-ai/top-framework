@@ -1,26 +1,11 @@
-"""Column configuration for HTTP tasks."""
+"""Column definitions for HTTP tasks."""
+
 from typing import List, Optional
 
 from top.web.colour import map_duration_colour, map_status_code_colour
 from top.web.task import HTTPTask
 
 from top.tui.column import TaskColumn
-
-
-#: Human-readable -> HTTPTask dataclass field/accessor function mappings
-#: Records are (accessor function/dataclass field, column width, dynamic function)
-# http_task_column_mappings = {
-#     "Method": ("method", 6),
-#     "Path": ("path", 20),
-#     "Worker": ("processor_name", 16),
-#     "Duration": ("get_duration", 7),
-#     "Ago": ("get_ago", 7),
-#     "Resp": ("status_code", 3),
-#     "IP": ("client_ip_address", 8),
-#     "Length": ("get_content_length", 10),
-#     "User agent": ("get_user_agent", 20),
-#     "Cty": ("get_ip_country", 2, dynamic_country_column)
-# }
 
 
 #: Define all columns that may appear in HTTP tasks table
@@ -40,7 +25,7 @@ http_task_columns = TaskColumn.create_map([
     TaskColumn("Resp", "status_code", 3, colour_function=map_status_code_colour),
     TaskColumn("IP", "get_original_ip", 16),
     TaskColumn("Length", "get_content_length", 10),
-    TaskColumn("User agent", "get_user_agent", 20),
+    TaskColumn("User agent", "get_user_agent"),
     TaskColumn("Cty", "get_ip_country", 2, dynamic_enable_function=dynamic_country_column),
 ])
 

@@ -183,6 +183,6 @@ class HTTPTask(Task):
         """
         forwarded_for = self.get_single_request_header("X-FORWARDED-FOR")
         if forwarded_for:
-            return forwarded_for.split(" ")[0]
+            return forwarded_for.split(",")[0].strip()
         return self.client_ip_address
 

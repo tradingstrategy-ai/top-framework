@@ -62,3 +62,13 @@ def test_dynamic_country_rule(tracker: RedisTracker):
         [t]
     )
     assert columns == ['IP']
+
+
+def test_x_forwarded_for():
+    """Check if the dynamic country column rule works."""
+
+    t: HTTPTask = HTTPTask.create_from_current_thread(1)
+    t.request_headers = [
+        ("X-Forwarded-for", "1.1.1.1, 8.8.8.8")
+    ]
+    assert t.get_original_ip() == "1.1.1.1"
