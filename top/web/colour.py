@@ -2,6 +2,7 @@
 
 `See the colour map <https://rich.readthedocs.io/en/stable/appendix/colors.html#appendix-colors>`_.
 """
+import datetime
 from typing import Optional
 
 from top.web.task import HTTPTask
@@ -23,13 +24,17 @@ def colour_row_by_duration(t: HTTPTask):
     return map_duration_colour(t, duration)
 
 
-def map_duration_colour(task: HTTPTask, duration: Optional[float]):
+def map_duration_colour(task: HTTPTask, duration: Optional[datetime.timedelta]):
     """Get row/value colour for request duration."""
+
     if not duration:
         return "white"
-    if duration < 1.0:
+
+    s = duration.total_seconds()
+
+    if s < 1.0:
         return "green"
-    elif duration < 2.5:
+    elif s < 2.5:
         return "yellow"
     else:
         return "red"

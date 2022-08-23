@@ -4,7 +4,7 @@ The entry point to the application is configured in `pyproject.toml`.
 """
 import enum
 import time
-from typing import List
+from typing import List, Optional
 
 import pkg_resources
 import typer
@@ -86,7 +86,7 @@ def create_ui(
         active_columns,
         column_mappings,
         height // 2 - 5,
-        colour_row_by_duration)
+        None)
 
     fill_tasks_table(
         past,
@@ -94,7 +94,7 @@ def create_ui(
         completed_columns,
         column_mappings,
         height // 2 - 5,
-        colour_row_by_status)
+        None)
 
     return layout
 
@@ -145,7 +145,7 @@ def recent(
     tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
     columns: str = typer.Option(", ".join(default_recent_columns), envvar="TOP_RECENT_COLUMNS", help="Comma separated list of columns to be displayed for HTTP requests"),
     mode: RecentMode = typer.Option("all", envvar="TOP_RECENT_MODE", help="Do we print all, active or complete requests"),
-    limit: int = typer.Option(50, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
+    limit: Optional[int] = typer.Option(None, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
 ):
     """
     Print out HTTP requests.

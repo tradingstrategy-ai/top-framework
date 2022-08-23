@@ -1,11 +1,12 @@
 import datetime
 
 from dataclasses import fields
-from typing import List, Optional, Protocol
+from typing import List, Optional, Protocol, Dict
 
-from rich.table import Table
+from rich.table import Table, Text
 
 from top.core.task import Task
+from top.tui.column import TaskColumn
 
 
 class RowColourFunction(Protocol):
@@ -22,7 +23,7 @@ class RowColourFunction(Protocol):
 
 def prepare_row(task: Task,
                 columns: List[str],
-                column_mappings: dict,
+                column_mappings: Dict[str, TaskColumn],
                 ) -> List[str]:
     """Render Task as a table row by the selected columns.
 
@@ -43,27 +44,37 @@ def prepare_row(task: Task,
 
     result = []
     for c in columns:
-        key = column_mappings[c].accessor
+
+        definition = column_mappings[c]
+        key = definition.accessor
 
         if key in dataclass_fields:
-            val = getattr(task, key)
+            raw_val = getattr(task, key)
         else:
             attr = getattr(task, key)
 
             try:
-                val = attr()
+                raw_val = attr()
             except Exception as e:
                 raise ValueError(f"Could not call accessor function {attr} for task {task}") from e
 
-        if val:
-            if isinstance(val, datetime.timedelta):
-                val = f"{val.total_seconds():.2f}"
-            elif type(val) == int:
-                val = f"{val:,}"
+        # Convert value object to string
+        if raw_val:
+            if isinstance(raw_val, datetime.timedelta):
+                val = f"{raw_val.total_seconds():.2f}"
+            elif type(raw_val) == int:
+                val = f"{raw_val:,}"
             else:
-                val = str(val)
+                val = str(raw_val)
         else:
             val = ""
+
+        if definition.colour_function:
+            t = Text(val)
+            colour = definition.colour_function(task, raw_val)
+            t.stylize(colour)
+            val = t
+
         result.append(val)
 
     return result
