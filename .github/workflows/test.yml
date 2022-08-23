@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           poetry env use '3.9'
-          poetry install -E gunicorn,docs
+          poetry install -E gunicorn -E docs
       - name: Run test scripts
         run: poetry run pytest
         env:
