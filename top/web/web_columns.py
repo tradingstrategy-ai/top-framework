@@ -38,7 +38,7 @@ http_task_columns = TaskColumn.create_map([
     TaskColumn("Duration", "get_duration", 7, colour_function=map_duration_colour),
     TaskColumn("Ago", "get_ago", 7),
     TaskColumn("Resp", "status_code", 3, colour_function=map_status_code_colour),
-    TaskColumn("IP", "client_ip_address", 16),
+    TaskColumn("IP", "get_original_ip", 16),
     TaskColumn("Length", "get_content_length", 10),
     TaskColumn("User agent", "get_user_agent", 20),
     TaskColumn("Cty", "get_ip_country", 2, dynamic_enable_function=dynamic_country_column),

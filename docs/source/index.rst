@@ -10,10 +10,11 @@ Welcome to Top Framework's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-    web-top
+    web-top/index
     design-goals
     data-structure
     security
+    troubleshooting
     tests
 
 Indices and tables

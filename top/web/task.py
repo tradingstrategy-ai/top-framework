@@ -24,7 +24,12 @@ class HTTPTask(Task):
     #: The full request URI if available
     uri: Optional[str] = None
 
-    #: Client IP address
+    #: IP address that connected to the web server.
+    #:
+    #: This is the direct IP address of the TCP/IP connection.
+    #: You probably want :py:meth:`get_original_ip` in most of the
+    #: cases.
+    #:
     client_ip_address: Optional[str] = None
 
     #: Request HTTP headers.
@@ -168,3 +173,16 @@ class HTTPTask(Task):
                 return ""
         else:
             return ""
+
+    def get_original_ip(self) -> str:
+        """Get the originating IP address of the requestor.
+
+        In the case the HTTP request was forwarded through services
+        like Cloudflare and reverse proxies like Nginx and Apache,
+        get the user IP address.
+        """
+        forwarded_for = self.get_single_request_header("X-FORWARDED-FOR")
+        if forwarded_for:
+            return forwarded_for.split(" ")[0]
+        return self.client_ip_address
+
