@@ -55,7 +55,7 @@ def server() -> str:
         "gunicorn",
         f"--bind=127.0.0.1:{port}",
         "--workers=2",
-        "--config=top/gunicorn/example_config.py",
+        "--config=scripts/gunicorn-example-config.py",
         "top.gunicorn.testapp:app"
     ]
 
