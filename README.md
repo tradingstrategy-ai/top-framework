@@ -41,3 +41,5 @@ Monitoring use cases you might have include:
 # License
 
 MIT.
+
+[Developed and maintained by Trading Strategy](https://tradingstrategy.ai).
