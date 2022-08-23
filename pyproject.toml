@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "top-framework"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python framework for creating UNIX top like TUI applications easily"
 authors = ["Mikko Ohtamaa <mikko@opensourcehacker.com>"]
 license = "MIT"
@@ -8,6 +8,9 @@ packages = [
     { include = "top" },
 ]
 keywords = ["cli", "UNIX", "TUI"]
+homepage = "https://github.com/tradingstrategy-ai/top-framework"
+repository = "https://github.com/tradingstrategy-ai/top-framework"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
