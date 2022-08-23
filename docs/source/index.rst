@@ -57,3 +57,10 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+License
+-------
+
+MIT.
+
+`Developed and maintained by Trading Strategy <https://tradingstrategy.ai>`_.
