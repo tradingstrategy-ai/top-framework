@@ -19,4 +19,4 @@ python:
       path: .
       extra_requirements:
         - gunicorn
-        - dev
+        - docs

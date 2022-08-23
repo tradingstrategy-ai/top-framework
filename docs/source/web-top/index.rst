@@ -1,9 +1,9 @@
 web-top
 =======
 
-`web-top` is a top-like tool to show active and completed
-HTTP requets on your web server.
+web-top is a UNIX top-like tool to live HTTP requests and responses of any web server.
 
+.. image:: screenshot.png
 
 .. toctree::
    :maxdepth: 2

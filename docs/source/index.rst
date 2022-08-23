@@ -26,6 +26,7 @@ Top framework is build on `Rich <https://github.com/Textualize/rich>`_ text user
    redis
    security
    troubleshooting
+   development
    tests
    reference/index
 
