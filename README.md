@@ -1,7 +1,9 @@
 A generic Python framework for writing UNIX top like Text User Interface applications.
 
-It comes with an example `web-top` application to give `top` like monitoring tool
+It comes with a `web-top` application to give `top` like monitoring tool
 for HTTP requests on any web server.
+
+![screenshot](https://raw.githubusercontent.com/tradingstrategy-ai/top-framework/master/docs/source/web-top/screenshot2.png)
 
 # Use cases
 

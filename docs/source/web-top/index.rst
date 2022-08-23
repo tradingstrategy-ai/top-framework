@@ -10,6 +10,7 @@ web-top is a UNIX top-like tool to live HTTP requests and responses of any web s
    :caption: Contents:
 
    about
+   installation
    usage
    integrations
    how-to-integrate
