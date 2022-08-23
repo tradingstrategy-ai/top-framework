@@ -35,7 +35,7 @@ Start Gunicorn with the config file that sets the hooks:
     gunicorn \
         --bind=127.0.0.1:8080 \
         --workers=2 \
-        --config=top/gunicorn/example_config.py \
+        --config=scripts/gunicorn-example-config.py \
         --log-level=debug \
         --access-logfile /dev/stdout \
         "top.gunicorn.testapp:slow_app"

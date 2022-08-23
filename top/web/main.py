@@ -18,18 +18,16 @@ from top.integration import get_tracker_by_url_config
 from top.redis.tracker import RedisTracker
 from top.tui.column import create_rich_column, determine_enabled_columns
 from top.tui.row import fill_tasks_table
-from top.web.colour import colour_row_by_status, colour_row_by_duration
+from top.web.colour import colour_row_by_status
 from top.web.web_columns import default_active_columns, default_completed_columns, http_task_columns, \
     default_recent_columns
 from top.web.task import HTTPTask
-
 
 help_text = """
 web-top is an interactive HTTP request monitor.
 
 For more information see https://github.com/tradingstrategy-ai/top-framework
 """
-
 
 app = typer.Typer(help=help_text)
 
@@ -42,12 +40,12 @@ class RecentMode(enum.Enum):
 
 
 def create_ui(
-    tracker: RedisTracker,
-    active_columns: List[str],
-    completed_columns: List[str],
-    column_mappings: dict,
-    width: int,
-    height: int) -> Layout:
+        tracker: RedisTracker,
+        active_columns: List[str],
+        completed_columns: List[str],
+        column_mappings: dict,
+        width: int,
+        height: int) -> Layout:
     """web-top UI using Rich."""
 
     active_tasks: List[HTTPTask] = list(tracker.get_active_tasks().values())
@@ -111,10 +109,13 @@ def version():
 
 @app.command()
 def live(
-    tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
-    refresh_rate: float = typer.Option(2.0, envvar="TOP_REFRESH_RATE", help="How many seconds have between refreshes"),
-    active_columns: str = typer.Option(", ".join(default_active_columns), envvar="ACTIVE_COLUMNS", help="Comma separated list of columns to be displayed for active HTTP requests"),
-    completed_columns: str = typer.Option(", ".join(default_completed_columns), envvar="COMPLETED_COLUMNS", help="Comma separated list of columns to be displayed for completed HTTP requests"),
+        tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
+        refresh_rate: float = typer.Option(2.0, envvar="TOP_REFRESH_RATE",
+                                           help="How many seconds have between refreshes"),
+        active_columns: str = typer.Option(", ".join(default_active_columns), envvar="ACTIVE_COLUMNS",
+                                           help="Comma separated list of columns to be displayed for active HTTP requests"),
+        completed_columns: str = typer.Option(", ".join(default_completed_columns), envvar="COMPLETED_COLUMNS",
+                                              help="Comma separated list of columns to be displayed for completed HTTP requests"),
 ):
     """
     Interactive monitor for active and completed request of your web server.
@@ -142,10 +143,12 @@ def live(
 
 @app.command()
 def recent(
-    tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
-    columns: str = typer.Option(", ".join(default_recent_columns), envvar="TOP_RECENT_COLUMNS", help="Comma separated list of columns to be displayed for HTTP requests"),
-    mode: RecentMode = typer.Option("all", envvar="TOP_RECENT_MODE", help="Do we print all, active or complete requests"),
-    limit: Optional[int] = typer.Option(None, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
+        tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
+        columns: str = typer.Option(", ".join(default_recent_columns), envvar="TOP_RECENT_COLUMNS",
+                                    help="Comma separated list of columns to be displayed for HTTP requests"),
+        mode: RecentMode = typer.Option("all", envvar="TOP_RECENT_MODE",
+                                        help="Do we print all, active or complete requests"),
+        limit: Optional[int] = typer.Option(None, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
 ):
     """
     Print out HTTP requests.

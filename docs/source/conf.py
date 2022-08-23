@@ -1,9 +1,12 @@
 # Configuration file for the Sphinx documentation builder.
 
+import os
+# Monkey-patch autosummary template context
+from sphinx.ext.autosummary.generate import AutosummaryRenderer
+
 project = 'Top Framework'
 copyright = '2022 Market Software Ltd'
 author = 'Mikko Ohtamaa'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -16,8 +19,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
-#    "sphinx_toolbox.more_autodoc",
-#    "sphinx_autodoc_typehints"
+    #    "sphinx_toolbox.more_autodoc",
+    #    "sphinx_autodoc_typehints"
 ]
 
 intersphinx_mapping = {
@@ -71,11 +74,6 @@ add_module_names = False
 
 autodoc_member_order = "bysource"
 
-# autosummary_imported_members = True
-
-# Monkey-patch autosummary template context
-from sphinx.ext.autosummary.generate import AutosummaryRenderer
-
 
 def partial_name(fullname):
     parts = fullname.split(".")
@@ -91,5 +89,4 @@ AutosummaryRenderer.__old_init__ = AutosummaryRenderer.__init__
 AutosummaryRenderer.__init__ = fixed_init
 
 # Tell import time Python code that this is Sphinx invocation
-import os
 os.environ["SPHINX_BUILD"] = "true"

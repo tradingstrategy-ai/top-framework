@@ -96,5 +96,3 @@ def determine_enabled_columns(
             enabled.append(c)
 
     return enabled
-
-

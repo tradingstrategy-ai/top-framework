@@ -63,5 +63,3 @@ def map_status_code_colour(t: HTTPTask, status_code: Optional[int]):
     else:
         # No idea?
         return "bright_magenta"
-
-

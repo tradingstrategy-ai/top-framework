@@ -21,6 +21,7 @@ class RowColourFunction(Protocol):
             One of colour names
         """
 
+
 def prepare_row(task: Task,
                 columns: List[str],
                 column_mappings: Dict[str, TaskColumn],
@@ -86,7 +87,7 @@ def fill_tasks_table(
         columns: List[str],
         column_mappings: dict,
         max_rows: Optional[int] = None,
-        colour_function: Optional[RowColourFunction]=None,
+        colour_function: Optional[RowColourFunction] = None,
 ):
     """Fill a Rich table with tasks as rows.
 

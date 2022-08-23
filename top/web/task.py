@@ -185,4 +185,3 @@ class HTTPTask(Task):
         if forwarded_for:
             return forwarded_for.split(",")[0].strip()
         return self.client_ip_address
-

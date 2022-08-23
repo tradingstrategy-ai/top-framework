@@ -1,6 +1,5 @@
 """Bunch of random utilities."""
 import socket
-import sys
 
 
 def sanitise_string(s: str) -> str:

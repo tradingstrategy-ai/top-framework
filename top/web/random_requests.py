@@ -9,7 +9,6 @@ from threading import Thread
 
 import requests
 
-
 server = "http://localhost:8080"
 
 
@@ -63,9 +62,10 @@ def event_generator():
         req = req.prepare()
         print("Sending request", req.url)
 
-        resp = session.send(req)
+        session.send(req)
 
-        next_event = datetime.datetime.utcnow() + datetime.timedelta(seconds=random.uniform(min_next_delay, max_next_delay))
+        next_event = datetime.datetime.utcnow() + datetime.timedelta(
+            seconds=random.uniform(min_next_delay, max_next_delay))
 
 
 def main():

@@ -125,4 +125,3 @@ def test_past_overflow(tracker: RedisTracker):
     assert len(completed_tasks) == 50
 
     assert completed_tasks[0].task_id == 59
-

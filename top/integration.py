@@ -11,7 +11,7 @@ class NoTrackerAvailableException(Exception):
     """No tracker backend configured."""
 
 
-def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str]=None) -> Optional[Tracker]:
+def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str] = None) -> Optional[Tracker]:
     """Resolve tracker by its configuration URL.
 
     Reads `TOP_TRACKER_URL` and `TOP_MAX_COMPLETED_TASKS`
@@ -45,7 +45,7 @@ def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str]=None) ->
     if not url:
         url = os.environ.get("TOP_TRACKER_URL")
         if not url:
-            raise NoTrackerAvailableException(f"Tracker backend configuration URL missing TOP_TRACKER_URL missing.\nPlease refer to manual how to pass a tracker backend URL.")
+            raise NoTrackerAvailableException("Tracker backend configuration URL missing TOP_TRACKER_URL missing.\nPlease refer to manual how to pass a tracker backend URL.")
 
     assert url.startswith("redis://"), f"Only Redis supported, got {url}"
 
