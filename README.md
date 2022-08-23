@@ -26,7 +26,7 @@ Monitoring use cases you might have include:
 
 # Documentation
 
-- [Browse Sphinx documentation](https://top-framework.readthedocs.io/)
+- [Browse documentation](https://top-framework.readthedocs.io/)
 
 # Community 
 
