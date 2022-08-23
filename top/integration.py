@@ -32,6 +32,10 @@ def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str]=None) ->
     :param task_type:
         Subclass of Task or Task class itself.
         Used to serialise/deserialise data to Redis.
+
+    :return:
+        A new task Tracker, unless we are under a special
+        build environment.
     """
 
     # https://docs.readthedocs.io/en/stable/environment-variables.html

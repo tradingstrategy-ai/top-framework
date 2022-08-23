@@ -10,7 +10,6 @@ from gunicorn.http.wsgi import Response
 from gunicorn.workers.base import Worker
 
 from top.integration import get_tracker_by_url_config
-from top.utils import is_sphinx_build
 from top.web.task import HTTPTask
 
 
