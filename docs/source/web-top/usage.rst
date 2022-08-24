@@ -132,3 +132,7 @@ Display the most recently completed HTTP requests in the terminal.
     │ US  │ 20.241.218.99           │ 7.33 │ 1.78     │ 200  │ GET    │ /api/pair-trade-data    │ 302     │ python-requests/2.27.1  │
     └─────┴─────────────────────────┴──────┴──────────┴──────┴────────┴─────────────────────────┴─────────┴─────────────────────────┘
 
+Quit
+----
+
+Press `CTRL + C`
