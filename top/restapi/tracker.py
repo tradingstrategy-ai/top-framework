@@ -10,6 +10,11 @@ from top.core.tracker import Tracker
 from top.core.task import Task
 
 
+class RESTResponseException(Exception):
+    """Something for with REST API response"""
+    pass
+
+
 class Actions(enum.Enum):
     """What actions our REST API endpoint provides.
 
@@ -82,6 +87,10 @@ class RESTAPITracker(Tracker):
                 "action": Actions.active_tasks.value,
             }
         )
+
+        if resp.status_code != 200:
+            raise RESTResponseException(f"Could not read the response: {self.api_url}: {resp.text}")
+
         return resp.json()
 
     def get_completed_tasks(self) -> List[Task]:
@@ -92,4 +101,8 @@ class RESTAPITracker(Tracker):
                 "action": Actions.completed_tasks.value,
             }
         )
+
+        if resp.status_code != 200:
+            raise RESTResponseException(f"Could not read the response: {self.api_url}: {resp.text}")
+
         return resp.json()
