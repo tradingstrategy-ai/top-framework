@@ -9,9 +9,6 @@ To run tests
 
     # Start redis at localhost:7777
     docker-compose up -d redis
-
-    export TOP_REDIS_URL="redis://localhost:7777/15"
-
     pytest
 
 Accessing redis

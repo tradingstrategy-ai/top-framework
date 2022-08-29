@@ -2,6 +2,7 @@
 
 import datetime
 import os
+import socket
 import threading
 from dataclasses import dataclass, field
 from typing import Optional, Union
@@ -23,6 +24,29 @@ class Task:
     convert Python :py:mod:`dataclasses` structures to JSON and back.
     """
 
+    #: Unique identified for this task.
+    #:
+    #: E.g. web request id if available.
+    #: Depends on the application.
+    #: Can be int or str depending on the context.
+    #:
+    task_id: Optional[Union[int, str]] = None
+
+    #: Human readable name for this task.
+    #:
+    #: From cron-like jobs this can be the cron job name.
+    #: For :py:class:`~top.core.web.task.HTTPTask`
+    #: this is not set, but tasks are identified by URI that consists of
+    #  protocol, host,
+    #: :py:data:`~top.core.web.task.HTTPTask.method` and :py:data:`~top.core.web.task.HTTPTask.path`.
+    task_name: Optional[str] = None
+
+    #: Host name on multiserver deployments.
+    #:
+    #: E.g. the web server DNS name if multiple
+    #: servers behind a load balancer.
+    host_name: Optional[str] = None
+
     #: OS process id that started this task.
     #:
     process_id: Optional[int] = None
@@ -35,16 +59,6 @@ class Task:
     #:
     #: E.g. connection id in PostgreSQL
     process_internal_id: Optional[str] = None
-
-    #: Unique identified for this task.
-    #:
-    #: E.g. web request id if available.
-    #: Depends on the application.
-    #: Can be int or str depending on the context.
-    #:
-    #:
-    #:
-    task_id: Optional[Union[int, str]] = None
 
     #: Human readable of the processor name is available
     processor_name: Optional[str] = None
@@ -104,6 +118,10 @@ class Task:
     #: When :py:meth:`top.core.tracker.Tracker.start_task`
     #: is called, the tracker specific tags are automatically
     #: applied here.
+    #:
+    #: - `See OpenTelemetry specification <https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute>`_
+    #:
+    #: - `See some example OpenTelemetry attributes and labels <https://lightstep.com/opentelemetry/attributes-and-labels>`_
     #:
     tags: Optional[dict] = None
 
@@ -198,6 +216,9 @@ class Task:
 
         thread_name = threading.current_thread().name
 
+        # https://stackoverflow.com/a/49610911/315168
+        host_name = socket.gethostname()
+
         if not processor_name:
             processor_name = f"{pid}:{thread_name}"
 
@@ -205,6 +226,7 @@ class Task:
             task_id=task_id,
             process_id=pid,
             thread_id=tid,
+            host_name=host_name,
             started_at=datetime.datetime.now(datetime.timezone.utc),
             processor_name=processor_name,
             **kwargs,

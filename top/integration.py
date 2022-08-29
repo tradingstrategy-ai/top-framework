@@ -5,13 +5,18 @@ from typing import Type, Optional
 from top.core.task import Task
 from top.core.tracker import Tracker
 from top.redis.tracker import RedisTracker
+from top.restapi.tracker import RESTAPITracker
 
 
 class NoTrackerAvailableException(Exception):
     """No tracker backend configured."""
 
 
-def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str] = None) -> Optional[Tracker]:
+def get_tracker_by_url_config(
+        task_type: Type[Task],
+        url: Optional[str] = None,
+        api_key: Optional[str] = None,
+) -> Optional[Tracker]:
     """Resolve tracker by its configuration URL.
 
     Reads `TOP_TRACKER_URL` and `TOP_MAX_COMPLETED_TASKS`
@@ -33,6 +38,11 @@ def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str] = None) 
         Subclass of Task or Task class itself.
         Used to serialise/deserialise data to Redis.
 
+    :param api_key:
+        API key for REST web server integration.
+        If not given read from `TOP_WEB_API_KEY`
+        environment variable.
+
     :return:
         A new task Tracker, unless we are under a special
         build environment.
@@ -47,6 +57,10 @@ def get_tracker_by_url_config(task_type: Type[Task], url: Optional[str] = None) 
         if not url:
             raise NoTrackerAvailableException("Tracker backend configuration URL missing TOP_TRACKER_URL missing.\nPlease refer to manual how to pass a tracker backend URL.")
 
-    assert url.startswith("redis://"), f"Only Redis supported, got {url}"
-
-    return RedisTracker.create_default_instance(task_type)
+    if url.startswith("redis://"):
+        assert url.startswith("redis://"), f"Only Redis supported, got {url}"
+        return RedisTracker.create_default_instance(task_type, url)
+    elif url.startswith("http://") or url.startswith("https://"):
+        return RESTAPITracker(url, task_type, api_key=api_key)
+    else:
+        raise NoTrackerAvailableException(f"Does not recognise URL: {url}")

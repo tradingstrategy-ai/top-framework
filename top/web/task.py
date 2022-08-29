@@ -12,6 +12,12 @@ from top.core.task import Task
 class HTTPTask(Task):
     """A task for tracking HTTP requests."""
 
+    #: Protocol from incoming HTTP request
+    protocol: Optional[str] = None
+
+    #: Host from incoming HTTP request
+    host: Optional[str] = None
+
     #: HTTP method like GET, POST, put
     method: Optional[str] = None
 
