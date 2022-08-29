@@ -55,6 +55,7 @@ def server(app):
 
 def test_rest_active_tasks(server):
     """RESTAPITracker.get_active_tasks works"""
+    # Test reading API key from the environment variable
     os.environ["WEB_TOP_API_KEY"] = EXAMPLE_API_KEY
     tracker_url = f"{server}/tracker"
     tracker = RESTAPITracker(tracker_url, task_type=HTTPTask)
