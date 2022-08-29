@@ -3,9 +3,10 @@
 import datetime
 import os
 import socket
+import sys
 import threading
 from dataclasses import dataclass, field
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from dataclasses_json import dataclass_json, config
 from marshmallow import fields
@@ -125,6 +126,13 @@ class Task:
     #:
     tags: Optional[dict] = None
 
+    #: Application command line
+    #:
+    #: Space separated command that was used to start this process.
+    #: Same as sys.argv.
+    #:
+    command_line: Optional[List[str]] = None
+
     def __eq__(self, other: "Task"):
         """All tasks are identified by their task_id attribute.
         """
@@ -199,6 +207,10 @@ class Task:
 
         - :py:attr:`processor_name`
 
+        - :py:attr:`host_name` (`socket.gethostname()`)
+
+        - Command line (`sys.argv`)
+
         :param task_id:
             Something unique to identify this task.
             If nothing else then use Python object hash.
@@ -229,5 +241,6 @@ class Task:
             host_name=host_name,
             started_at=datetime.datetime.now(datetime.timezone.utc),
             processor_name=processor_name,
+            command_line=sys.argv,
             **kwargs,
         )
