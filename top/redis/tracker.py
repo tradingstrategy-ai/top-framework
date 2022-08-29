@@ -2,7 +2,7 @@
 
 import datetime
 import os
-from typing import Dict, List, Type
+from typing import Dict, List, Type, Optional
 
 from redis import StrictRedis, ConnectionPool
 
@@ -150,6 +150,7 @@ class RedisTracker(Tracker):
 
     @staticmethod
     def create_default_instance(task_type: Type[Task],
+                                redis_url: Optional[str] = None,
                                 redis_url_env="TOP_TRACKER_URL",
                                 max_past_tasks_env="TOP_MAX_COMPLETED_TASKS",
                                 max_past_tasks=None) -> "RedisTracker":
@@ -158,6 +159,9 @@ class RedisTracker(Tracker):
         :param task_type:
             Subclass of Task or Task class itself.
             Used to serialise/deserialise data to Redis.
+
+        :param redis_url:
+            Redis database string where to connect to
 
         :param redis_url_env:
             This environment variable contains the Redis URL where to connect
@@ -168,9 +172,10 @@ class RedisTracker(Tracker):
             If not available default to :py:data:`DEFAULT_MAX_COMPLETED_TASKS`.
         """
 
-        redis_url_env = os.environ.get(redis_url_env)
-        if not redis_url_env:
-            raise RuntimeError(f"You must configure Redis connection URL with {redis_url_env} environment variable")
+        if not redis_url:
+            redis_url = os.environ.get(redis_url_env)
+            if not redis_url:
+                raise RuntimeError(f"You must configure Redis connection URL with {redis_url_env} environment variable")
 
         if not max_past_tasks:
             max_past_tasks = os.environ.get(max_past_tasks_env)
@@ -179,7 +184,7 @@ class RedisTracker(Tracker):
             else:
                 max_past_tasks = int(max_past_tasks)
 
-        pool = ConnectionPool.from_url(redis_url_env)
+        pool = ConnectionPool.from_url(redis_url)
         client = StrictRedis(connection_pool=pool)
 
         return RedisTracker(client, task_type, max_past_tasks)

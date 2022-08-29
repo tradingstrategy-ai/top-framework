@@ -16,7 +16,7 @@ from top.web.task import HTTPTask
 #: A global initialisation per worker, etc.
 #: Not sure if gunicorn offers us a smarter approach to do this,
 #: e.g. by worker?
-tracker = get_tracker_by_url_config(HTTPTask)
+tracker = get_tracker_by_url_config(HTTPTask, "redis://localhost:7777/15")
 
 
 def when_ready(server):

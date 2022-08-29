@@ -20,7 +20,9 @@ class Actions(enum.Enum):
 
 
 class RESTAPITracker(Tracker):
-    """Get active and completed requests from the web server direclty.
+    """REST API integration for getting active HTTP requests from a web server.
+
+    Get active and completed requests from the web server direclty.
 
     - You have a web server that itself can track its active requests and completed responses
 
@@ -56,8 +58,8 @@ class RESTAPITracker(Tracker):
         if api_key:
             self.api_key = api_key
         else:
-            api_key = os.environ.get("TOP_WEB_API_KEY")
-            if not api_key:
+            self.api_key = os.environ.get("TOP_WEB_API_KEY")
+            if not self.api_key:
                 raise RuntimeError(f"You must configure Tracker API endpoint key with TOP_WEB_API_KEY environment variable")
 
         # HTTP 1.1 keep alive connection

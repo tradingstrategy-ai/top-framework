@@ -15,9 +15,12 @@ runner = CliRunner()
 
 
 @pytest.fixture
-def tracker() -> RedisTracker:
+def tracker(test_db_redis_url) -> RedisTracker:
     """Create default emitter"""
-    emitter = RedisTracker.create_default_instance(HTTPTask, max_past_tasks=50)
+    emitter = RedisTracker.create_default_instance(
+        HTTPTask,
+        redis_url=test_db_redis_url,
+        max_past_tasks=50)
     emitter.clear()
     return emitter
 

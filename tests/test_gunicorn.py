@@ -21,9 +21,12 @@ from top.web.task import HTTPTask
 
 
 @pytest.fixture
-def tracker() -> RedisTracker:
+def tracker(test_db_redis_url) -> RedisTracker:
     """Create default emitter"""
-    emitter = RedisTracker.create_default_instance(HTTPTask)
+    emitter = RedisTracker.create_default_instance(
+        HTTPTask,
+        redis_url=test_db_redis_url,
+    )
     emitter.clear()
     return emitter
 

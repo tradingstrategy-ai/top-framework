@@ -11,15 +11,14 @@ from top.restapi.tracker import Actions, RESTAPITracker
 from top.web.task import HTTPTask
 
 
-EXAMPLE_TASK_DATA = json.loads("""
-{"task_id":1,"protocol":null,"host":null,"method":"GET","path":"/foobar","params":{"action":"active-tasks"},"tags":{"node.platform":"darwin","node.version":"v16.15.0"},"client_ip_address":"::1","request_headers":[["HOST","localhost:3000"],["CONNECTION","keep-alive"],["CACHE-CONTROL","max-age=0"],["SEC-CH-UA","\"Chromium\";v=\"104\", \" Not A;Brand\";v=\"99\", \"Google Chrome\";v=\"104\""],["SEC-CH-UA-MOBILE","?0"],["SEC-CH-UA-PLATFORM","\"macOS\""],["UPGRADE-INSECURE-REQUESTS","1"],["USER-AGENT","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"],["ACCEPT","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"],["SEC-FETCH-SITE","none"],["SEC-FETCH-MODE","navigate"],["SEC-FETCH-USER","?1"],["SEC-FETCH-DEST","document"],["ACCEPT-ENCODING","gzip, deflate, br"],["ACCEPT-LANGUAGE","en-US,en;q=0.9"]],"process_id":49492,"host_name":"ilwrath.local","updated_at":"2022-08-29T10:10:44.734Z","started_at":"2022-08-29T10:10:44.734Z"}
-""")
+# Load some random output data to simulate web-top API output
+EXAMPLE_FILE = os.path.join(os.path.dirname(__file__), "sample.json")
 
+EXAMPLE_TASK_DATA = json.load(open(EXAMPLE_FILE, "rt"))
 
 EXAMPLE_API_KEY = "123"
 
 
-@view_config(renderer="json")
 def dummy_tracker(request: Request):
     """Endpoint to simulate web-top-node"""
     assert request.method == "GET"
@@ -39,25 +38,40 @@ def test_app():
     """WSGI app to simulate web-top-node"""
     with Configurator() as config:
         config.add_route('dummy_tracker', '/tracker')
-        config.add_view(dummy_tracker, route_name='dummy_tracker')
+        config.add_view(dummy_tracker, route_name='dummy_tracker', renderer='json')
         app = config.make_wsgi_app()
         return app
 
 
 @pytest.fixture
-def server(app):
+def server(test_app):
     """Test web server"""
-    server = StopableWSGIServer(app)
-    server.wait()
-    yield "http://localhost:3456"
+    server = StopableWSGIServer.create(test_app, port=3333)
+    server.wait(retries=1)
+    yield "http://localhost:3333"
     server.shutdown()
 
 
 def test_rest_active_tasks(server):
     """RESTAPITracker.get_active_tasks works"""
     # Test reading API key from the environment variable
-    os.environ["WEB_TOP_API_KEY"] = EXAMPLE_API_KEY
+    os.environ["TOP_WEB_API_KEY"] = EXAMPLE_API_KEY
     tracker_url = f"{server}/tracker"
     tracker = RESTAPITracker(tracker_url, task_type=HTTPTask)
     active = tracker.get_active_tasks()
     assert len(active) == 1
+
+    assert active["1"]["started_at"] != None
+    assert active["1"]["task_id"] == 1
+
+
+def test_rest_completed_tasks(server):
+    """RESTAPITracker.get_active_tasks works"""
+    # Test reading API key from the environment variable
+    os.environ["TOP_WEB_API_KEY"] = EXAMPLE_API_KEY
+    tracker_url = f"{server}/tracker"
+    tracker = RESTAPITracker(tracker_url, task_type=HTTPTask)
+    completed = tracker.get_completed_tasks()
+    assert len(completed) == 1
+    assert completed[0]["started_at"] != None
+    assert completed[0]["task_id"] == 1
