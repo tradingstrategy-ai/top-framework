@@ -1,7 +1,7 @@
 """Task tracking core."""
 
 import abc
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from top.core.task import Task
 
@@ -39,7 +39,7 @@ class Tracker(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_active_tasks(self) -> Dict[str, Task]:
+    def get_active_tasks(self) -> Dict[Union[int, str], Task]:
         """Get currently active tasks.
 
         :return:

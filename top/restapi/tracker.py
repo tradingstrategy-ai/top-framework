@@ -2,7 +2,7 @@
 
 import enum
 import os
-from typing import Dict, List, Type, Optional
+from typing import Dict, List, Type, Optional, Union
 
 import requests
 
@@ -79,7 +79,7 @@ class RESTAPITracker(Tracker):
     def end_task(self, task: Task):
         raise NotImplementedError("Must be provided by the server integration")
 
-    def get_active_tasks(self) -> Dict[str, Task]:
+    def get_active_tasks(self) -> Dict[Union[int, str], Task]:
         resp = self.session.get(
             self.api_url,
             params={
@@ -91,7 +91,8 @@ class RESTAPITracker(Tracker):
         if resp.status_code != 200:
             raise RESTResponseException(f"Could not read the response: {self.api_url}: {resp.text}")
 
-        return resp.json()
+        raw_data = resp.json()
+        return {key: self.task_type.from_dict(value) for key, value in raw_data.items()}
 
     def get_completed_tasks(self) -> List[Task]:
         resp = self.session.get(
@@ -105,4 +106,5 @@ class RESTAPITracker(Tracker):
         if resp.status_code != 200:
             raise RESTResponseException(f"Could not read the response: {self.api_url}: {resp.text}")
 
-        return resp.json()
+        raw_data = resp.json()
+        return [self.task_type.from_dict(item) for item in raw_data]

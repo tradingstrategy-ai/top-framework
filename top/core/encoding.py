@@ -1,5 +1,6 @@
 """JSON encoding for special types."""
 
+import iso8601
 import datetime
 from typing import Optional
 
@@ -13,5 +14,8 @@ def encode_date(d: datetime.datetime) -> Optional[str]:
 
 def decode_date(s: str) -> Optional[datetime.datetime]:
     if s:
-        return datetime.datetime.fromisoformat(s)
+        # Python built-in fromisoformat() cannot
+        # read dates exported by JavaScript Date.toISOString().
+        # return datetime.datetime.fromisoformat(s)
+        return iso8601.parse_date(s)
     return None

@@ -61,8 +61,8 @@ def test_rest_active_tasks(server):
     active = tracker.get_active_tasks()
     assert len(active) == 1
 
-    assert active["1"]["started_at"] != None
-    assert active["1"]["task_id"] == 1
+    assert active["1"].started_at != None
+    assert active["1"].task_id == 1
 
 
 def test_rest_completed_tasks(server):
@@ -73,5 +73,5 @@ def test_rest_completed_tasks(server):
     tracker = RESTAPITracker(tracker_url, task_type=HTTPTask)
     completed = tracker.get_completed_tasks()
     assert len(completed) == 1
-    assert completed[0]["started_at"] != None
-    assert completed[0]["task_id"] == 1
+    assert completed[0].started_at != None
+    assert completed[0].task_id == 1
