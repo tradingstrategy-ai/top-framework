@@ -25,7 +25,7 @@ def tracker(test_db_redis_url) -> RedisTracker:
     return emitter
 
 
-def test_recent(tracker: RedisTracker):
+def test_recent(tracker: RedisTracker, test_db_redis_url):
     """Print recernt tasks to console."""
 
     t = HTTPTask.create_from_current_thread(1)
@@ -35,7 +35,7 @@ def test_recent(tracker: RedisTracker):
     t2 = HTTPTask.create_from_current_thread(2)
     tracker.start_task(t2)
 
-    result = runner.invoke(app, ["recent"])
+    result = runner.invoke(app, ["recent", f"--tracker-url={test_db_redis_url}"])
     assert result.exit_code == 0
 
 
