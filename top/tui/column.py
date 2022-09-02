@@ -39,6 +39,8 @@ class TaskColumn:
     #: Is this column fixed with
     width: Optional[int] = None
 
+    max_width: Optional[int] = None
+
     #: A function to checl if this column is enabled or not
     #:
     #: Gets all table tasks as a parameter and
@@ -59,7 +61,7 @@ def create_rich_column(column: str, column_mappings: dict) -> Column:
 
     desc = column_mappings[column]
     width = desc.width
-    return Column(column, width=width)
+    return Column(column, width=width, max_width=desc.max_width, no_wrap=True)
 
 
 def determine_enabled_columns(

@@ -78,12 +78,15 @@ def create_ui(
     # Show the longest duration tasks first
     active_tasks.sort(key=lambda t: t.get_duration(), reverse=True)
 
+    # Decoration takes 5 rows per table
+    rows_height = height - 10
+
     fill_tasks_table(
         active,
         active_tasks,
         active_columns,
         column_mappings,
-        height // 2 - 5,
+        rows_height // 2,
         None)
 
     fill_tasks_table(
@@ -91,7 +94,7 @@ def create_ui(
         completed_tasks,
         completed_columns,
         column_mappings,
-        height // 2 - 5,
+        rows_height // 2,
         None)
 
     return layout
@@ -187,3 +190,8 @@ def recent(
 
     console = Console()
     console.print(table)
+
+
+if __name__ == "__main__":
+    # Execute typer entry point
+    app()

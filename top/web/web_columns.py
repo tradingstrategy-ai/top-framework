@@ -17,16 +17,16 @@ def dynamic_country_column(tasks: List[HTTPTask]) -> Optional[str]:
 
 
 http_task_columns = TaskColumn.create_map([
+    TaskColumn("Cty", "get_ip_country", 2, dynamic_enable_function=dynamic_country_column),
+    TaskColumn("IP", "get_original_ip", 16),
     TaskColumn("Method", "method", 6),
     TaskColumn("Path", "path", 20),
     TaskColumn("Worker", "processor_name", 16),
     TaskColumn("Duration", "get_duration", 7, colour_function=map_duration_colour),
     TaskColumn("Ago", "get_ago", 7),
     TaskColumn("Resp", "status_code", 3, colour_function=map_status_code_colour),
-    TaskColumn("IP", "get_original_ip", 16),
     TaskColumn("Length", "get_content_length", 10),
-    TaskColumn("User agent", "get_user_agent"),
-    TaskColumn("Cty", "get_ip_country", 2, dynamic_enable_function=dynamic_country_column),
+    TaskColumn("User agent", "get_user_agent", max_width=20),
 ])
 
 
