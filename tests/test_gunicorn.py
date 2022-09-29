@@ -6,6 +6,7 @@ References
 
 """
 import datetime
+import os
 import shutil
 import subprocess
 import time
@@ -62,8 +63,19 @@ def server() -> str:
         "top.gunicorn.testapp:app"
     ]
 
+    # Redis from docker-compose.yml
+    our_env = {
+        "TOP_TRACKER_URL": "redis://localhost:7777/15"
+    }
+
     out = subprocess.PIPE
-    process = psutil.Popen(cmd_list, stdin=subprocess.DEVNULL, stdout=out, stderr=out)
+    process = psutil.Popen(
+        cmd_list,
+        stdin=subprocess.DEVNULL,
+        stdout=out,
+        stderr=out,
+        env=os.environ | our_env
+    )
 
     # Check that gunicorn starts in the port we want
     deadline = time.time() + start_timeout

@@ -5,6 +5,8 @@ This module provides hooks you can refer in Gunicorn config.
 See `Gunicorn settings <https://docs.gunicorn.org/en/stable/settings.html>`_
 """
 
+import os
+
 from gunicorn.http import Request
 from gunicorn.http.wsgi import Response
 from gunicorn.workers.base import Worker
@@ -13,10 +15,19 @@ from top.integration import get_tracker_by_url_config
 from top.web.task import HTTPTask
 
 
+tracker_url = os.environ.get("TOP_TRACKER_URL")
+if not tracker_url:
+    raise RuntimeError("You must pass TOP_TRACKER_URL env variable if you wish to use gunicorn top integration")
+
+
 #: A global initialisation per worker, etc.
 #: Not sure if gunicorn offers us a smarter approach to do this,
 #: e.g. by worker?
-tracker = get_tracker_by_url_config(HTTPTask, "redis://localhost:7777/15")
+#:
+#: Explicit set URL to None to force reading the backend
+#: URL from TOP_TRACKER_URL environment variable.
+#:
+tracker = get_tracker_by_url_config(HTTPTask, url=None)
 
 
 def when_ready(server):

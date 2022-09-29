@@ -7,4 +7,20 @@ Then:
 
 .. code-block:: shell
 
-    poetry install -E gunicorn,docs
+    poetry shell
+    poetry install -E gunicorn -E docs
+
+To start Redis for tests:
+
+.. code-block:: shell
+
+    docker-compose up -d redis
+
+Run tests:
+
+.. code-block:: shell
+
+    pytest
+
+
+
