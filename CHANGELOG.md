@@ -1,3 +1,8 @@
+# 0.3
+
+- Made `TOP_TRACKER_URL` explicitly required on Gunicorn launch,
+  instead of defaulting to the integration test URL 
+
 # 0.2
 
 - Added support for REST API based tracking backend and 
