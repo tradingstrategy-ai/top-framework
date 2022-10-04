@@ -15,4 +15,4 @@ Currently available through PyPi:
 
 .. code-block::
 
-    pip install task-top
+    pip install top-framework

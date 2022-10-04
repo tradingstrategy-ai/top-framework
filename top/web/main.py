@@ -19,8 +19,7 @@ from top.redis.tracker import RedisTracker
 from top.tui.column import create_rich_column, determine_enabled_columns
 from top.tui.row import fill_tasks_table
 from top.web.colour import colour_row_by_status
-from top.web.web_columns import default_active_columns, default_completed_columns, http_task_columns, \
-    default_recent_columns
+from top.web.web_columns import default_active_columns, default_completed_columns, http_task_columns, default_recent_columns
 from top.web.task import HTTPTask
 
 help_text = """
@@ -34,18 +33,13 @@ app = typer.Typer(help=help_text)
 
 class RecentMode(enum.Enum):
     """What do we print out in recent requests print out."""
+
     all = "all"
     active = "active"
     complete = "complete"
 
 
-def create_ui(
-        tracker: RedisTracker,
-        active_columns: List[str],
-        completed_columns: List[str],
-        column_mappings: dict,
-        width: int,
-        height: int) -> Layout:
+def create_ui(tracker: RedisTracker, active_columns: List[str], completed_columns: List[str], column_mappings: dict, width: int, height: int) -> Layout:
     """web-top UI using Rich."""
 
     active_tasks: List[HTTPTask] = list(tracker.get_active_tasks().values())
@@ -54,17 +48,19 @@ def create_ui(
     active_columns = determine_enabled_columns(active_columns, column_mappings, active_tasks)
     completed_columns = determine_enabled_columns(completed_columns, column_mappings, completed_tasks)
 
-    active = Table(*[create_rich_column(c, column_mappings) for c in active_columns],
-                   title=f"Active HTTP requests ({len(active_tasks)})",
-                   width=width,
-                   border_style="bright_black",
-                   )
+    active = Table(
+        *[create_rich_column(c, column_mappings) for c in active_columns],
+        title=f"Active HTTP requests ({len(active_tasks)})",
+        width=width,
+        border_style="bright_black",
+    )
 
-    past = Table(*[create_rich_column(c, column_mappings) for c in completed_columns],
-                 title=f"Completed HTTP responses ({len(completed_tasks)})",
-                 width=width,
-                 border_style="bright_black",
-                 )
+    past = Table(
+        *[create_rich_column(c, column_mappings) for c in completed_columns],
+        title=f"Completed HTTP responses ({len(completed_tasks)})",
+        width=width,
+        border_style="bright_black",
+    )
 
     layout = Layout()
     layout.split_column(
@@ -81,21 +77,9 @@ def create_ui(
     # Decoration takes 5 rows per table
     rows_height = height - 10
 
-    fill_tasks_table(
-        active,
-        active_tasks,
-        active_columns,
-        column_mappings,
-        rows_height // 2,
-        None)
+    fill_tasks_table(active, active_tasks, active_columns, column_mappings, rows_height // 2, None)
 
-    fill_tasks_table(
-        past,
-        completed_tasks,
-        completed_columns,
-        column_mappings,
-        rows_height // 2,
-        None)
+    fill_tasks_table(past, completed_tasks, completed_columns, column_mappings, rows_height // 2, None)
 
     return layout
 
@@ -106,19 +90,16 @@ def version():
 
     See https://typer.tiangolo.com/tutorial/options/version/
     """
-    my_version = pkg_resources.get_distribution('top-framework').version
+    my_version = pkg_resources.get_distribution("top-framework").version
     print(f"{my_version}")
 
 
 @app.command()
 def live(
-        tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
-        refresh_rate: float = typer.Option(2.0, envvar="TOP_REFRESH_RATE",
-                                           help="How many seconds have between refreshes"),
-        active_columns: str = typer.Option(", ".join(default_active_columns), envvar="ACTIVE_COLUMNS",
-                                           help="Comma separated list of columns to be displayed for active HTTP requests"),
-        completed_columns: str = typer.Option(", ".join(default_completed_columns), envvar="COMPLETED_COLUMNS",
-                                              help="Comma separated list of columns to be displayed for completed HTTP requests"),
+    tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
+    refresh_rate: float = typer.Option(2.0, envvar="TOP_REFRESH_RATE", help="How many seconds have between refreshes"),
+    active_columns: str = typer.Option(", ".join(default_active_columns), envvar="ACTIVE_COLUMNS", help="Comma separated list of columns to be displayed for active HTTP requests"),
+    completed_columns: str = typer.Option(", ".join(default_completed_columns), envvar="COMPLETED_COLUMNS", help="Comma separated list of columns to be displayed for completed HTTP requests"),
 ):
     """
     Interactive monitor for active and completed request of your web server.
@@ -133,25 +114,17 @@ def live(
 
     with Live(console=console, screen=True, auto_refresh=False) as live:
         while True:
-            ui = create_ui(
-                tracker,
-                active_columns,
-                completed_columns,
-                http_task_columns,
-                console.size.width,
-                console.size.height)
+            ui = create_ui(tracker, active_columns, completed_columns, http_task_columns, console.size.width, console.size.height)
             live.update(ui, refresh=True)
             time.sleep(refresh_rate)
 
 
 @app.command()
 def recent(
-        tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
-        columns: str = typer.Option(", ".join(default_recent_columns), envvar="TOP_RECENT_COLUMNS",
-                                    help="Comma separated list of columns to be displayed for HTTP requests"),
-        mode: RecentMode = typer.Option("all", envvar="TOP_RECENT_MODE",
-                                        help="Do we print all, active or complete requests"),
-        limit: Optional[int] = typer.Option(None, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
+    tracker_url: str = typer.Option(..., envvar="TOP_TRACKER_URL", help="Redis database for HTTP request tracking"),
+    columns: str = typer.Option(", ".join(default_recent_columns), envvar="TOP_RECENT_COLUMNS", help="Comma separated list of columns to be displayed for HTTP requests"),
+    mode: RecentMode = typer.Option("all", envvar="TOP_RECENT_MODE", help="Do we print all, active or complete requests"),
+    limit: Optional[int] = typer.Option(None, envvar="TOP_RECENT_LIMIT", help="How many rows to print (max)"),
 ):
     """
     Print out HTTP requests.

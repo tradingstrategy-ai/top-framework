@@ -34,9 +34,7 @@ class LongRunningTaskContextManagerFactory:
     What an ugly class name. Let's Java.
     """
 
-    def __init__(self,
-                 tracker: Tracker,
-                 TaskClass: Type[LongRunningTask] = LongRunningTask):
+    def __init__(self, tracker: Tracker, TaskClass: Type[LongRunningTask] = LongRunningTask):
         self.tracker = tracker
         self.TaskClass = TaskClass
 
@@ -44,10 +42,7 @@ class LongRunningTaskContextManagerFactory:
         self.task_stack: List[LongRunningTask] = []
 
     @contextmanager
-    def track(self,
-         name: str,
-         task_id: Optional[str] = None,
-         **kwargs) -> AbstractContextManager[Any]:
+    def track(self, name: str, task_id: Optional[str] = None, **kwargs) -> AbstractContextManager[Any]:
         """Context manager factory."""
 
         if task_id is None:
@@ -58,10 +53,7 @@ class LongRunningTaskContextManagerFactory:
         else:
             parent_task_id = None
 
-        task = self.TaskClass.create_from_current_thread(
-            task_id,
-            parent_task_id=parent_task_id,
-            **kwargs)
+        task = self.TaskClass.create_from_current_thread(task_id, parent_task_id=parent_task_id, **kwargs)
 
         task.task_name = name
 
@@ -87,7 +79,7 @@ thread_storage = threading.local()
 
 
 def initialize(tracker: Tracker):
-    """"Initialize tracker backend for the context manager.
+    """ "Initialize tracker backend for the context manager.
 
     You must call this from each thread that tracks tasks.
     """

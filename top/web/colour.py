@@ -9,16 +9,12 @@ from top.web.task import HTTPTask
 
 
 def colour_row_by_status(t: HTTPTask):
-    """Set row colour by its HTTP status.
-
-    """
+    """Set row colour by its HTTP status."""
     return map_status_code_colour(t, t.status_code)
 
 
 def colour_row_by_duration(t: HTTPTask):
-    """Set row colour by its duration.
-
-    """
+    """Set row colour by its duration."""
 
     duration = t.get_duration().total_seconds()
     return map_duration_colour(t, duration)
@@ -41,9 +37,7 @@ def map_duration_colour(task: HTTPTask, duration: Optional[datetime.timedelta]):
 
 
 def map_status_code_colour(t: HTTPTask, status_code: Optional[int]):
-    """Set row colour by its HTTP status.
-
-    """
+    """Set row colour by its HTTP status."""
 
     if not status_code:
         # Still active

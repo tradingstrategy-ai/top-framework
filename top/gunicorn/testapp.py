@@ -13,12 +13,9 @@ from lorem import paragraph
 
 def app(environ, start_response):
     """Simplest possible application object"""
-    data = b'Hello, World!\n'
-    status = '200 OK'
-    response_headers = [
-        ('Content-type', 'text/plain'),
-        ('Content-Length', str(len(data)))
-    ]
+    data = b"Hello, World!\n"
+    status = "200 OK"
+    response_headers = [("Content-type", "text/plain"), ("Content-Length", str(len(data)))]
     start_response(status, response_headers)
     return iter([data])
 
@@ -37,10 +34,7 @@ def slow_app(environ, start_response):
     ]
 
     status = random.choice(statuses)
-    response_headers = [
-        ('Content-type', 'text/plain; charset=utf8'),
-        ('Content-Length', str(len(data)))
-    ]
+    response_headers = [("Content-type", "text/plain; charset=utf8"), ("Content-Length", str(len(data)))]
     time.sleep(random.uniform(0.1, 2))
     start_response(status, response_headers)
     return iter([data])

@@ -13,9 +13,9 @@ class NoTrackerAvailableException(Exception):
 
 
 def get_tracker_by_url_config(
-        task_type: Type[Task],
-        url: Optional[str] = None,
-        api_key: Optional[str] = None,
+    task_type: Type[Task],
+    url: Optional[str] = None,
+    api_key: Optional[str] = None,
 ) -> Optional[Tracker]:
     """Resolve tracker by its configuration URL.
 
