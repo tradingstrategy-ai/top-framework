@@ -33,6 +33,12 @@ class Task:
     #:
     task_id: Optional[Union[int, str]] = None
 
+    #: Unique identified for the parent task in a nested task hierarchy.
+    #:
+    #: Needed e.g. when doing subprocess trees.
+    #:
+    parent_task_id: Optional[Union[int, str]] = None
+
     #: Human readable name for this task.
     #:
     #: From cron-like jobs this can be the cron job name.
