@@ -169,10 +169,7 @@ class HTTPTask(Task):
         code = self.get_ip_country()
         if code is not None:
             try:
-                flag = "".join(
-                    unicodedata.lookup(f"REGIONAL INDICATOR SYMBOL LETTER {char}")
-                    for char in code
-                )
+                flag = "".join(unicodedata.lookup(f"REGIONAL INDICATOR SYMBOL LETTER {char}") for char in code)
                 return flag
             except KeyError:
                 # T1 = Tor country

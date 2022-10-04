@@ -22,5 +22,7 @@ Run tests:
 
     pytest
 
+Formatting code
+---------------
 
 

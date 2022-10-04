@@ -33,6 +33,12 @@ class Task:
     #:
     task_id: Optional[Union[int, str]] = None
 
+    #: Unique identified for the parent task in a nested task hierarchy.
+    #:
+    #: Needed e.g. when doing subprocess trees.
+    #:
+    parent_task_id: Optional[Union[int, str]] = None
+
     #: Human readable name for this task.
     #:
     #: From cron-like jobs this can be the cron job name.
@@ -68,38 +74,17 @@ class Task:
     #:
     #: UTC timestamp serialised as ISO 8601.
     #: Automatically filled by :py:meth:`create_from_current_thread`.
-    started_at: Optional[datetime.datetime] = field(
-        default=None,
-        metadata=config(
-            encoder=encode_date,
-            decoder=decode_date,
-            mm_field=fields.DateTime(format='iso')
-        )
-    )
+    started_at: Optional[datetime.datetime] = field(default=None, metadata=config(encoder=encode_date, decoder=decode_date, mm_field=fields.DateTime(format="iso")))
     #: When this task was last updated.
     #:
     #: UTC timestamp serialised as ISO 8601.
-    updated_at: Optional[datetime.datetime] = field(
-        default=None,
-        metadata=config(
-            encoder=encode_date,
-            decoder=decode_date,
-            mm_field=fields.DateTime(format='iso')
-        )
-    )
+    updated_at: Optional[datetime.datetime] = field(default=None, metadata=config(encoder=encode_date, decoder=decode_date, mm_field=fields.DateTime(format="iso")))
 
     #: When this task was ended.
     #:
     #: UTC timestamp serialised as ISO 8601.
     #: Automatically filled by :py:meth:`top.core.tracker.Tracker.end_task`.
-    ended_at: Optional[datetime.datetime] = field(
-        default=None,
-        metadata=config(
-            encoder=encode_date,
-            decoder=decode_date,
-            mm_field=fields.DateTime(format='iso')
-        )
-    )
+    ended_at: Optional[datetime.datetime] = field(default=None, metadata=config(encoder=encode_date, decoder=decode_date, mm_field=fields.DateTime(format="iso")))
     #: Did this task success?
     #:
     #: None = we do not know yet.
@@ -134,8 +119,7 @@ class Task:
     command_line: Optional[List[str]] = None
 
     def __eq__(self, other: "Task"):
-        """All tasks are identified by their task_id attribute.
-        """
+        """All tasks are identified by their task_id attribute."""
         return self.task_id == other.task_id
 
     def __hash__(self):
@@ -192,10 +176,7 @@ class Task:
         return cls.from_json(blob)
 
     @classmethod
-    def create_from_current_thread(cls,
-                                   task_id: Union[str, int],
-                                   processor_name: Optional[str] = None,
-                                   **kwargs) -> "Task":
+    def create_from_current_thread(cls, task_id: Union[str, int], processor_name: Optional[str] = None, **kwargs) -> "Task":
         """Create a task and assuming the processor is the current OS thread.
 
         Automatically labels the task to belong to the OS

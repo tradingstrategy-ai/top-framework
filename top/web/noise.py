@@ -42,14 +42,7 @@ def event_generator():
         if left > 0:
             time.sleep(left)
 
-        t = HTTPTask.create_from_current_thread(
-            task_counter,
-            method=random.choice(methods),
-            path=random.choice(paths),
-            request_headers={
-                "Client-addr": random.choice(client_ips)
-            }
-        )
+        t = HTTPTask.create_from_current_thread(task_counter, method=random.choice(methods), path=random.choice(paths), request_headers={"Client-addr": random.choice(client_ips)})
 
         task_counter += 1
 

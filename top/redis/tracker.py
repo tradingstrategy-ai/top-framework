@@ -48,10 +48,7 @@ class RedisTracker(Tracker):
         tracker.end_task(task)
     """
 
-    def __init__(self,
-                 redis: StrictRedis,
-                 task_type: Type[Task],
-                 max_past_tasks=50):
+    def __init__(self, redis: StrictRedis, task_type: Type[Task], max_past_tasks=50):
         """Create a new emitter.
 
         :param redis:
@@ -91,7 +88,10 @@ class RedisTracker(Tracker):
         - Call at the start of the tests when you need to clear
           the previous test database
         """
-        for key in (self.processors_hkey, self.past_tasks_list,):
+        for key in (
+            self.processors_hkey,
+            self.past_tasks_list,
+        ):
             self.redis.delete(key)
 
         # Add a marker key about clearing the database
@@ -149,11 +149,7 @@ class RedisTracker(Tracker):
         return res
 
     @staticmethod
-    def create_default_instance(task_type: Type[Task],
-                                redis_url: Optional[str] = None,
-                                redis_url_env="TOP_TRACKER_URL",
-                                max_past_tasks_env="TOP_MAX_COMPLETED_TASKS",
-                                max_past_tasks=None) -> "RedisTracker":
+    def create_default_instance(task_type: Type[Task], redis_url: Optional[str] = None, redis_url_env="TOP_TRACKER_URL", max_past_tasks_env="TOP_MAX_COMPLETED_TASKS", max_past_tasks=None) -> "RedisTracker":
         """Creates a connection to the Redis database.
 
         :param task_type:

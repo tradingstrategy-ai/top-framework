@@ -64,8 +64,7 @@ def event_generator():
 
         session.send(req)
 
-        next_event = datetime.datetime.utcnow() + datetime.timedelta(
-            seconds=random.uniform(min_next_delay, max_next_delay))
+        next_event = datetime.datetime.utcnow() + datetime.timedelta(seconds=random.uniform(min_next_delay, max_next_delay))
 
 
 def main():

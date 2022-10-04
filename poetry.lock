@@ -957,6 +957,14 @@ pure-eval = "*"
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
+name = "tblib"
+version = "1.7.0"
+description = "Traceback serialization library."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
 name = "textual"
 version = "0.1.18"
 description = "Text User Interface using Rich"
@@ -1166,7 +1174,7 @@ gunicorn = ["gunicorn", "python-lorem"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "93f4bec596be862a95b83c0828babad771ddb0e27843addbbfef1069a49ce4b3"
+content-hash = "3f494b9bb04f9594954b66e8bf7e3964a1119192d8816af15d8c8a22c9bbe973"
 
 [metadata.files]
 alabaster = [
@@ -1570,6 +1578,10 @@ sphinxcontrib-serializinghtml = [
 stack-data = [
     {file = "stack_data-0.4.0-py3-none-any.whl", hash = "sha256:b94fed36d725cfabc6d09ed5886913e35eed9009766a1af1d5941b9da3a94aaa"},
     {file = "stack_data-0.4.0.tar.gz", hash = "sha256:a90ae7e260f7d15aefeceb46f0a028d4ccb9eb8856475c53e341945342d41ea7"},
+]
+tblib = [
+    {file = "tblib-1.7.0-py2.py3-none-any.whl", hash = "sha256:289fa7359e580950e7d9743eab36b0691f0310fce64dee7d9c31065b8f723e23"},
+    {file = "tblib-1.7.0.tar.gz", hash = "sha256:059bd77306ea7b419d4f76016aef6d7027cc8a0785579b5aad198803435f882c"},
 ]
 textual = [
     {file = "textual-0.1.18-py3-none-any.whl", hash = "sha256:59110935418c597c1c50876edfd6799ad5b59d51a91ca6744fc45e36eb89638e"},

@@ -12,6 +12,7 @@ from top.core.task import Task
 
 class RESTResponseException(Exception):
     """Something for with REST API response"""
+
     pass
 
 
@@ -20,6 +21,7 @@ class Actions(enum.Enum):
 
     See https://github.com/tradingstrategy-ai/web-top-node/blob/master/src/server.ts
     """
+
     active_tasks = "active-tasks"
     completed_tasks = "completed-tasks"
 
@@ -36,11 +38,12 @@ class RESTAPITracker(Tracker):
     - Used with `Node.js integration <https://www.npmjs.com/package/@trading-strategy-ai/web-top-node>`_
     """
 
-    def __init__(self,
-                 api_url: str,
-                 task_type: Type[Task],
-                 api_key: Optional[str] = None,
-                 ):
+    def __init__(
+        self,
+        api_url: str,
+        task_type: Type[Task],
+        api_key: Optional[str] = None,
+    ):
         """Create a new emitter.
 
         :param api_url:
@@ -85,7 +88,7 @@ class RESTAPITracker(Tracker):
             params={
                 "api-key": self.api_key,
                 "action": Actions.active_tasks.value,
-            }
+            },
         )
 
         if resp.status_code != 200:
@@ -100,7 +103,7 @@ class RESTAPITracker(Tracker):
             params={
                 "api-key": self.api_key,
                 "action": Actions.completed_tasks.value,
-            }
+            },
         )
 
         if resp.status_code != 200:
