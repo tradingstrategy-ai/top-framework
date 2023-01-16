@@ -1,3 +1,7 @@
+# Current
+
+- Fix response is None in Gunicorn handling hooks
+
 # 0.3
 
 - Made `TOP_TRACKER_URL` explicitly required on Gunicorn launch,
