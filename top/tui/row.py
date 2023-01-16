@@ -22,10 +22,11 @@ class RowColourFunction(Protocol):
         """
 
 
-def prepare_row(task: Task,
-                columns: List[str],
-                column_mappings: Dict[str, TaskColumn],
-                ) -> List[str]:
+def prepare_row(
+    task: Task,
+    columns: List[str],
+    column_mappings: Dict[str, TaskColumn],
+) -> List[str]:
     """Render Task as a table row by the selected columns.
 
     Get HTTPTask value either by accessor method or direct attribute.
@@ -82,12 +83,12 @@ def prepare_row(task: Task,
 
 
 def fill_tasks_table(
-        table: Table,
-        tasks: List[Task],
-        columns: List[str],
-        column_mappings: dict,
-        max_rows: Optional[int] = None,
-        colour_function: Optional[RowColourFunction] = None,
+    table: Table,
+    tasks: List[Task],
+    columns: List[str],
+    column_mappings: dict,
+    max_rows: Optional[int] = None,
+    colour_function: Optional[RowColourFunction] = None,
 ):
     """Fill a Rich table with tasks as rows.
 

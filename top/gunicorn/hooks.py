@@ -52,13 +52,16 @@ def pre_request(worker: Worker, req: Request):
     req.tracked_task = task
 
 
-def post_request(worker: Worker, req: Request, environ: dict, resp: Response):
+def post_request(worker: Worker, req: Request, environ: dict, resp: Optional[Response]):
     """Gunicorn post_request hook."""
     task: HTTPTask = getattr(req, "tracked_task", None)
     assert task is not None, "Request did not carry tracking information"
 
-    task.status_code = resp.status_code
-    task.status_message = resp.status
-    task.response_headers = resp.headers
+    # Response can be None if the process crashed, failed,
+    # raised exception, etc.
+    if resp is not None:
+        task.status_code = resp.status_code
+        task.status_message = resp.status
+        task.response_headers = resp.headers
 
     tracker.end_task(task)

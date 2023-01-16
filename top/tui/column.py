@@ -64,10 +64,7 @@ def create_rich_column(column: str, column_mappings: dict) -> Column:
     return Column(column, width=width, max_width=desc.max_width, no_wrap=True)
 
 
-def determine_enabled_columns(
-        columns: List[str],
-        column_mappings: Dict[str, TaskColumn],
-        tasks: List[Task]) -> List[str]:
+def determine_enabled_columns(columns: List[str], column_mappings: Dict[str, TaskColumn], tasks: List[Task]) -> List[str]:
     """Filter visible columns based on the contents of the table.
 
     E.g. country column is visible only if one of the
