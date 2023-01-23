@@ -1,3 +1,7 @@
+# 0.3.1
+
+- Allow no status code responses in Gunicorn integration
+
 # 0.3
 
 - Made `TOP_TRACKER_URL` explicitly required on Gunicorn launch,

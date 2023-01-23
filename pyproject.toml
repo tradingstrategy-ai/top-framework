@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "top-framework"
-version = "0.3"
+version = "0.3.1"
 description = "Python framework for creating UNIX top like TUI applications easily"
 authors = ["Mikko Ohtamaa <mikko@opensourcehacker.com>"]
 license = "MIT"
