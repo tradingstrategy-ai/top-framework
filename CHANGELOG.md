@@ -1,3 +1,7 @@
+# 0.3.2
+
+- Another attempt to fix Gunicorn's no responses
+
 # 0.3.1
 
 - Allow no status code responses in Gunicorn integration
