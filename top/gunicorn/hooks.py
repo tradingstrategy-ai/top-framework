@@ -57,8 +57,9 @@ def post_request(worker: Worker, req: Request, environ: dict, resp: Response):
     task: HTTPTask = getattr(req, "tracked_task", None)
     assert task is not None, "Request did not carry tracking information"
 
-    task.status_code = resp.status_code
-    task.status_message = resp.status
-    task.response_headers = resp.headers
+    if resp.status_code is not None:
+        task.status_code = resp.status_code
+        task.status_message = resp.status
+        task.response_headers = resp.headers
 
     tracker.end_task(task)
